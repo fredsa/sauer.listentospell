@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 public class TrainActivity extends Activity {
+
   private static final int MY_DATA_CHECK_CODE = 42;
   private EditText answerEditText;
   private EditText logArea;

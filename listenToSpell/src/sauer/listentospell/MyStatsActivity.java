@@ -4,13 +4,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class WordEntryActivity extends Activity {
+public class MyStatsActivity extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     TextView textview = new TextView(this);
-    textview.setText("This word entry tab");
+    textview.setText("Here are your stats");
     setContentView(textview);
   }
 }
