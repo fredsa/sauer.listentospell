@@ -6,9 +6,9 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TabHost;
 
-public class HelloTabWidget extends TabActivity {
+public class MainActivity extends TabActivity {
 
-  private static final String TAG = HelloTabWidget.class.getName();
+  private static final String TAG = MainActivity.class.getName();
 
   @Override
   public void onCreate(Bundle savedInstanceState) {

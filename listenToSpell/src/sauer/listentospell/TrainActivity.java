@@ -90,7 +90,7 @@ public class TrainActivity extends Activity {
 
   public void onDoneClick(View view) {
     startActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER).setComponent(
-        new ComponentName("sauer.listentospell", "sauer.listentospell.HelloTabWidget")));
+        new ComponentName("sauer.listentospell", "sauer.listentospell.MainActivity")));
     String text = answerEditText.getText().toString();
     if (word.equals(text)) {
       tts.speak(text + ". That's right.", TextToSpeech.QUEUE_FLUSH, null);
