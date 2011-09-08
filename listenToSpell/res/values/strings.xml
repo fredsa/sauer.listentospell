@@ -4,4 +4,6 @@
     <string name="app_name">Listen to Spell</string>
     <string name="play_button">Say word again</string>
     <string name="submit_button">Done</string>
+    <string name="word_list_heading">Word List:</string>
+    <string name="save_button">Save</string>
 </resources>

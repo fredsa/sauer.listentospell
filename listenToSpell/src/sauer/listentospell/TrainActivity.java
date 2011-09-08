@@ -51,8 +51,6 @@ public class TrainActivity extends Activity {
     };
 
     checkTts();
-
-    //    tts = new TextToSpeech(this, initListener);
   }
 
   private void checkTts() {
