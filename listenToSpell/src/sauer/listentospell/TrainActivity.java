@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class TestActivity extends Activity {
+public class TrainActivity extends Activity {
   private static final int MY_DATA_CHECK_CODE = 42;
   private EditText answerEditText;
   private EditText logArea;
@@ -23,7 +23,7 @@ public class TestActivity extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.main);
+    setContentView(R.layout.train);
     answerEditText = (EditText) findViewById(R.id.answer_textbox);
     answerEditText.setOnEditorActionListener(new OnEditorActionListener() {
       @Override

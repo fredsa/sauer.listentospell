@@ -21,8 +21,8 @@ public class HelloTabWidget extends TabActivity {
     Intent intent; // Reusable Intent for each tab
 
     // Word Entry Tab
-    intent = new Intent().setClass(this, TestActivity.class);
-    spec = tabHost.newTabSpec("test").setIndicator("Test Me").setContent(intent);
+    intent = new Intent().setClass(this, TrainActivity.class);
+    spec = tabHost.newTabSpec("train").setIndicator("Train").setContent(intent);
     tabHost.addTab(spec);
 
     // Word Entry Tab
