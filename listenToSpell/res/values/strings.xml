@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, ListenToSpellActivity!</string>
+    <string name="app_name">Listen to Spell</string>
+    <string name="play_button">Say word again</string>
+    <string name="submit_button">Done</string>
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical" android:layout_height="wrap_content"
+  android:layout_width="match_parent">
+  <LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content" android:id="@+id/linearLayout1">
+    <LinearLayout android:layout_height="match_parent"
+      android:id="@+id/linearLayout2" android:layout_width="match_parent"></LinearLayout>
+  </LinearLayout>
+  <LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content" android:id="@+id/linearLayout3">
+    <RelativeLayout android:layout_height="match_parent"
+      android:id="@+id/relativeLayout1" android:layout_width="match_parent"
+      android:gravity="center_horizontal">
+      <Button android:layout_width="wrap_content"
+        android:onClick="onPlayClick" android:layout_height="wrap_content"
+        android:text="@string/play_button" android:id="@+id/play_button"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"></Button>
+    </RelativeLayout>
+  </LinearLayout>
+  <EditText android:layout_width="match_parent"
+    android:layout_height="wrap_content" android:id="@+id/answer_textbox"
+    android:selectAllOnFocus="true">
+    <requestFocus></requestFocus>
+  </EditText>
+  <RelativeLayout android:layout_width="match_parent"
+    android:gravity="center_horizontal" android:layout_height="wrap_content"
+    android:id="@+id/relativeLayout2">
+    <Button android:onClick="onDoneClick" android:layout_height="wrap_content"
+      android:text="@string/submit_button" android:id="@+id/done_button"
+      android:layout_width="wrap_content"></Button>
+  </RelativeLayout>
+  <EditText android:layout_width="match_parent"
+    android:inputType="textMultiLine" android:id="@+id/log_area"
+    android:layout_height="130dp"></EditText>
+</LinearLayout>
