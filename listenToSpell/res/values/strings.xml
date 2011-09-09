@@ -7,4 +7,6 @@
     <string name="word_list_heading">Word List:</string>
     <string name="save_button">Save</string>
     <string name="wait_for_tts">Initializing TTS...</string>
+    <string name="cannot_train">Your word list is empty.</string>
+    <string name="please_click_enter_words_tab">"Please click on the 'Enter Words' tab to create your word list. You can then come back here to train yourself."</string>
 </resources>

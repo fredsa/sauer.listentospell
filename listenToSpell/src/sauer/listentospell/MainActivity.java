@@ -31,6 +31,8 @@ public class MainActivity extends TabActivity {
     spec = tabHost.newTabSpec("entry2").setIndicator("My Stats").setContent(intent);
     tabHost.addTab(spec);
 
-    tabHost.setCurrentTab(0);
+    ListenToSpellApplication app = (ListenToSpellApplication) getApplication();
+
+    tabHost.setCurrentTab(app.isSetup() ? 0 : 1);
   }
 }

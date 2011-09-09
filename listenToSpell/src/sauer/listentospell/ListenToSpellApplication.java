@@ -4,11 +4,14 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class ListenToSpellApplication extends Application {
   private static final String WORDLIST = "wordlist";
   private SharedPreferences prefs;
 
-  public String[] getWordList() {
+  public ArrayList<String> getWordList() {
     return split(getWordText());
   }
 
@@ -17,7 +20,7 @@ public class ListenToSpellApplication extends Application {
   }
 
   public String normalize(String text) {
-    String[] words = split(text);
+    ArrayList<String> words = split(text);
 
     String t = normalize(words);
     return t;
@@ -33,7 +36,7 @@ public class ListenToSpellApplication extends Application {
     prefs.edit().putString(WORDLIST, text).apply();
   }
 
-  private String normalize(String[] words) {
+  private String normalize(ArrayList<String> words) {
     StringBuilder t = new StringBuilder();
     for (String word : words) {
       t.append(word).append("\n");
@@ -41,8 +44,16 @@ public class ListenToSpellApplication extends Application {
     return t.toString();
   }
 
-  private final String[] split(String text) {
-    return text.split("[^a-zA-Z-]");
+  private final ArrayList<String> split(String text) {
+    String[] arr = text.split("[^a-zA-Z-]");
+    if (arr.length == 1 && text.equals(arr[0])) {
+      return new ArrayList<String>();
+    }
+    return (ArrayList<String>) Arrays.asList(arr);
+  }
+
+  public boolean isSetup() {
+    return !getWordList().isEmpty();
   }
 
 }

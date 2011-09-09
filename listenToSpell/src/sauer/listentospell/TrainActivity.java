@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
+import java.util.ArrayList;
+
 public class TrainActivity extends Activity {
 
   private static final int MY_DATA_CHECK_CODE = 42;
@@ -20,13 +22,26 @@ public class TrainActivity extends Activity {
   private OnInitListener initListener;
   private TextToSpeech tts;
   private String word;
-  private ListenToSpellApplication listenToSpellApplication;
+  private ListenToSpellApplication app;
   private TextView waitForTtsTextView;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    app = (ListenToSpellApplication) getApplication();
+    chooseNewWord();
+
+    Log.d(TAG, "isSetup============" + app.isSetup());
+    Log.d(TAG, "getWordText============" + app.getWordText());
+    Log.d(TAG, "getWordList============" + app.getWordList().size());
+    if (!app.isSetup()) {
+      setContentView(R.layout.cannot_train);
+      return;
+    }
+
     setContentView(R.layout.train);
+
     waitForTtsTextView = (TextView) findViewById(R.id.wait_for_tts);
     answerEditText = (EditText) findViewById(R.id.answer_textbox);
     answerEditText.setOnEditorActionListener(new OnEditorActionListener() {
@@ -39,15 +54,13 @@ public class TrainActivity extends Activity {
       }
     });
 
-    listenToSpellApplication = (ListenToSpellApplication) getApplication();
-
     initListener = new OnInitListener() {
       @Override
       public void onInit(int status) {
         Log.e(TAG, "OnInitListener.onInit(" + status + ")");
         if (status == TextToSpeech.SUCCESS) {
           waitForTtsTextView.setVisibility(View.GONE);
-          chooseNewWord();
+          say("Spell: " + word, TextToSpeech.QUEUE_ADD);
         } else {
           Log.e(TAG, "OnInitListener.onInit(ERROR = " + status + ")");
         }
@@ -58,10 +71,10 @@ public class TrainActivity extends Activity {
   }
 
   private void chooseNewWord() {
-    String[] wordList = listenToSpellApplication.getWordList();
-    word = wordList.length == 0 ? "hello" : wordList[(int) (Math.random() * wordList.length)];
+    ArrayList<String> wordList = app.getWordList();
+    int idx = (int) (Math.random() * wordList.size());
+    word = wordList.size() == 0 ? "" : wordList.get(idx);
     Log.e(TAG, "word=" + word);
-    say("Spell: " + word, TextToSpeech.QUEUE_ADD);
   }
 
   private void checkTts() {
@@ -109,6 +122,7 @@ public class TrainActivity extends Activity {
         say(letter, TextToSpeech.QUEUE_ADD);
       }
       chooseNewWord();
+      say("Spell: " + word, TextToSpeech.QUEUE_ADD);
     } else {
       say(text + "? That's incorrect. Spell: " + word, TextToSpeech.QUEUE_ADD);
     }
@@ -119,7 +133,7 @@ public class TrainActivity extends Activity {
   }
 
   private void say(String text, int queueMode) {
-    Log.d(TAG, "say(" + text + ")");
+    Log.d(TAG, "******************************************** say(" + text + ")");
     tts.speak(text, queueMode, null);
   }
 }
