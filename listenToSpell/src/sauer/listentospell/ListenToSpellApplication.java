@@ -5,7 +5,23 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class ListenToSpellApplication extends Application {
+  private static final String WORDLIST = "wordlist";
   private SharedPreferences prefs;
+
+  public String[] getWordList() {
+    return split(getWordText());
+  }
+
+  public String getWordText() {
+    return prefs.getString(WORDLIST, "");
+  }
+
+  public String normalize(String text) {
+    String[] words = split(text);
+
+    String t = normalize(words);
+    return t;
+  }
 
   @Override
   public void onCreate() {
@@ -13,13 +29,11 @@ public class ListenToSpellApplication extends Application {
     prefs = getSharedPreferences("listtospell", Context.MODE_PRIVATE);
   }
 
-  public final String[] toWords(String text) {
-    return text.split("[^a-zA-Z-]");
+  public void updateWords(String text) {
+    prefs.edit().putString(WORDLIST, text).apply();
   }
 
-  public String normalize(String text) {
-    String[] words = toWords(text);
-
+  private String normalize(String[] words) {
     StringBuilder t = new StringBuilder();
     for (String word : words) {
       t.append(word).append("\n");
@@ -27,18 +41,8 @@ public class ListenToSpellApplication extends Application {
     return t.toString();
   }
 
-  public String[] getWordList() {
-    String t = getWords();
-    String[] wordList = toWords(t);
-    return wordList;
-  }
-
-  public String getWords() {
-    return prefs.getString("wordlist", "");
-  }
-
-  public void updateWords(String text) {
-    prefs.edit().putString("wordlist", text).apply();
+  private final String[] split(String text) {
+    return text.split("[^a-zA-Z-]");
   }
 
 }

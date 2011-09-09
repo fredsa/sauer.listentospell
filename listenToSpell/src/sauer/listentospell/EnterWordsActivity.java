@@ -25,7 +25,7 @@ public class EnterWordsActivity extends Activity {
     listenToSpellApplication = (ListenToSpellApplication) getApplication();
 
 
-    String t = listenToSpellApplication.getWords();
+    String t = listenToSpellApplication.getWordText();
     wordListEditText.setText(t);
 
     Button saveButton = (Button) findViewById(R.id.word_list_save_button);
