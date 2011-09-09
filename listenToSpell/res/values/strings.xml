@@ -6,4 +6,5 @@
     <string name="submit_button">Done</string>
     <string name="word_list_heading">Word List:</string>
     <string name="save_button">Save</string>
+    <string name="wait_for_tts">Initializing TTS...</string>
 </resources>

@@ -27,7 +27,7 @@ public class MainActivity extends TabActivity {
     tabHost.addTab(spec);
 
     // My Stats
-    intent = new Intent().setClass(this, EnterWordsActivity.class);
+    intent = new Intent().setClass(this, MyStatsActivity.class);
     spec = tabHost.newTabSpec("entry2").setIndicator("My Stats").setContent(intent);
     tabHost.addTab(spec);
 

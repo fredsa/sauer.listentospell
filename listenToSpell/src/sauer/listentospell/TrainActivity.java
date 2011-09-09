@@ -1,7 +1,6 @@
 package sauer.listentospell;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -22,11 +21,13 @@ public class TrainActivity extends Activity {
   private TextToSpeech tts;
   private String word;
   private ListenToSpellApplication listenToSpellApplication;
+  private TextView waitForTtsTextView;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.train);
+    waitForTtsTextView = (TextView) findViewById(R.id.wait_for_tts);
     answerEditText = (EditText) findViewById(R.id.answer_textbox);
     answerEditText.setOnEditorActionListener(new OnEditorActionListener() {
       @Override
@@ -40,17 +41,13 @@ public class TrainActivity extends Activity {
 
     listenToSpellApplication = (ListenToSpellApplication) getApplication();
 
-    String[] wordList = listenToSpellApplication.getWordList();
-
-    word = wordList.length == 0 ? "hello" : wordList[(int) (Math.random() * wordList.length)];
-    Log.e(TAG, "word=" + word);
-
     initListener = new OnInitListener() {
       @Override
       public void onInit(int status) {
         Log.e(TAG, "OnInitListener.onInit(" + status + ")");
         if (status == TextToSpeech.SUCCESS) {
-          tts.speak("Spell: " + word, TextToSpeech.QUEUE_ADD, null);
+          waitForTtsTextView.setVisibility(View.GONE);
+          chooseNewWord();
         } else {
           Log.e(TAG, "OnInitListener.onInit(ERROR = " + status + ")");
         }
@@ -58,6 +55,13 @@ public class TrainActivity extends Activity {
     };
 
     checkTts();
+  }
+
+  private void chooseNewWord() {
+    String[] wordList = listenToSpellApplication.getWordList();
+    word = wordList.length == 0 ? "hello" : wordList[(int) (Math.random() * wordList.length)];
+    Log.e(TAG, "word=" + word);
+    say("Spell: " + word, TextToSpeech.QUEUE_ADD);
   }
 
   private void checkTts() {
@@ -92,24 +96,30 @@ public class TrainActivity extends Activity {
   }
 
   public void onDoneClick(View view) {
-    startActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER).setComponent(
-        new ComponentName("sauer.listentospell", "sauer.listentospell.MainActivity")));
+    Log.d(TAG, "onDoneClick()");
     String text = answerEditText.getText().toString();
     if (word.equals(text)) {
-      tts.speak(text + ". That's right.", TextToSpeech.QUEUE_FLUSH, null);
+      say(text + ". That's right.", TextToSpeech.QUEUE_FLUSH);
       for (int i = 0; i < word.length(); i++) {
         String letter = "" + word.charAt(i);
         if (letter.equals("a")) {
           letter = "eh"; // say 'eh', not 'uh'
         }
-        tts.speak(letter, TextToSpeech.QUEUE_ADD, null);
+        Log.d(TAG, "letter=" + letter);
+        say(letter, TextToSpeech.QUEUE_ADD);
       }
+      chooseNewWord();
     } else {
-      tts.speak(text + "? That's incorrect. Spell: " + word, TextToSpeech.QUEUE_ADD, null);
+      say(text + "? That's incorrect. Spell: " + word, TextToSpeech.QUEUE_ADD);
     }
   }
 
   public void onPlayClick(View view) {
-    tts.speak(word, TextToSpeech.QUEUE_FLUSH, null);
+    say(word, TextToSpeech.QUEUE_FLUSH);
+  }
+
+  private void say(String text, int queueMode) {
+    Log.d(TAG, "say(" + text + ")");
+    tts.speak(text, queueMode, null);
   }
 }
