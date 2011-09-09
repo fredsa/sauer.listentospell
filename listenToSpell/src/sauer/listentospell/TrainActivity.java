@@ -19,7 +19,8 @@ public class TrainActivity extends Activity {
   private EditText logArea;
   private OnInitListener initListener;
   private TextToSpeech tts;
-  private String word = "restaurant";
+  private String word;
+  private Persisted persisted;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,13 @@ public class TrainActivity extends Activity {
       }
     });
     logArea = (EditText) findViewById(R.id.log_area);
+
+    persisted = Persisted.get(this);
+
+    String[] wordList = persisted.getWordList();
+
+    word = wordList.length == 0 ? "hello" : wordList[(int) (Math.random() * wordList.length)];
+    log("word=" + word);
 
     initListener = new OnInitListener() {
       @Override
@@ -64,19 +72,17 @@ public class TrainActivity extends Activity {
     super.onActivityResult(requestCode, resultCode, data);
     switch (requestCode) {
       case MY_DATA_CHECK_CODE:
-        log("onActivityResult() resultCode=" + resultCode + "; data=" + data);
+        //        log("onActivityResult() resultCode=" + resultCode + "; data=" + data);
         break;
       default:
-        log("onActivityResult() requestCode=" + requestCode);
+        //        log("onActivityResult() requestCode=" + requestCode);
     }
 
     if (requestCode == MY_DATA_CHECK_CODE) {
       if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
         // success, create the TTS instance
-        log("success...");
         //        tts = new TextToSpeech(this, initListener);
         tts = new TextToSpeech(getApplicationContext(), initListener);
-        log("...success");
       } else {
         // missing data, install it
         log("missing data");

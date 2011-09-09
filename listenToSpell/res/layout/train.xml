@@ -21,7 +21,7 @@
   </LinearLayout>
   <EditText android:layout_width="match_parent"
     android:layout_height="wrap_content" android:id="@+id/answer_textbox"
-    android:selectAllOnFocus="true">
+    android:selectAllOnFocus="true" android:inputType="textNoSuggestions">
     <requestFocus></requestFocus>
   </EditText>
   <RelativeLayout android:layout_width="match_parent"
