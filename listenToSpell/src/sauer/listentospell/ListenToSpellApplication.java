@@ -1,14 +1,16 @@
 package sauer.listentospell;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class Persisted {
+public class ListenToSpellApplication extends Application {
+  private SharedPreferences prefs;
 
-  private final SharedPreferences prefs;
-
-  private Persisted(SharedPreferences prefs) {
-    this.prefs = prefs;
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    prefs = getSharedPreferences("listtospell", Context.MODE_PRIVATE);
   }
 
   public final String[] toWords(String text) {
@@ -33,11 +35,6 @@ public class Persisted {
 
   public String getWords() {
     return prefs.getString("wordlist", "");
-  }
-
-  public static Persisted get(Context ctx) {
-    SharedPreferences prefs = ctx.getSharedPreferences("listtospell", Context.MODE_PRIVATE);
-    return new Persisted(prefs);
   }
 
   public void updateWords(String text) {

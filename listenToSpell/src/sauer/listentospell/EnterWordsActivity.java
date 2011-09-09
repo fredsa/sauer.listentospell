@@ -12,7 +12,7 @@ public class EnterWordsActivity extends Activity {
 
   private EditText logArea;
 
-  private Persisted persisted;
+  private ListenToSpellApplication listenToSpellApplication;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -22,10 +22,10 @@ public class EnterWordsActivity extends Activity {
 
     wordListEditText = (EditText) findViewById(R.id.word_list);
 
-    persisted = Persisted.get(this);
+    listenToSpellApplication = (ListenToSpellApplication) getApplication();
 
 
-    String t = persisted.getWords();
+    String t = listenToSpellApplication.getWords();
     wordListEditText.setText(t);
 
     Button saveButton = (Button) findViewById(R.id.word_list_save_button);
@@ -39,9 +39,9 @@ public class EnterWordsActivity extends Activity {
   }
 
   private void parseAndSave(String text) {
-    text = persisted.normalize(text);
+    text = listenToSpellApplication.normalize(text);
     wordListEditText.setText(text);
-    persisted.updateWords(text);
+    listenToSpellApplication.updateWords(text);
   }
 
   protected void log(String text) {

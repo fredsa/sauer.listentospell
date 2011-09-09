@@ -20,7 +20,7 @@ public class TrainActivity extends Activity {
   private OnInitListener initListener;
   private TextToSpeech tts;
   private String word;
-  private Persisted persisted;
+  private ListenToSpellApplication listenToSpellApplication;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -39,9 +39,9 @@ public class TrainActivity extends Activity {
     });
     logArea = (EditText) findViewById(R.id.log_area);
 
-    persisted = Persisted.get(this);
+    listenToSpellApplication = (ListenToSpellApplication) getApplication();
 
-    String[] wordList = persisted.getWordList();
+    String[] wordList = listenToSpellApplication.getWordList();
 
     word = wordList.length == 0 ? "hello" : wordList[(int) (Math.random() * wordList.length)];
     log("word=" + word);
