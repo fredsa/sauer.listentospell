@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -15,8 +16,8 @@ import android.widget.TextView.OnEditorActionListener;
 public class TrainActivity extends Activity {
 
   private static final int MY_DATA_CHECK_CODE = 42;
+  private static final String TAG = TrainActivity.class.getName();
   private EditText answerEditText;
-  private EditText logArea;
   private OnInitListener initListener;
   private TextToSpeech tts;
   private String word;
@@ -30,30 +31,28 @@ public class TrainActivity extends Activity {
     answerEditText.setOnEditorActionListener(new OnEditorActionListener() {
       @Override
       public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        // log("actionId=" + actionId + "; event=" + event + "; TextView=" + v);
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
           onDoneClick(v);
         }
         return true;
       }
     });
-    logArea = (EditText) findViewById(R.id.log_area);
 
     listenToSpellApplication = (ListenToSpellApplication) getApplication();
 
     String[] wordList = listenToSpellApplication.getWordList();
 
     word = wordList.length == 0 ? "hello" : wordList[(int) (Math.random() * wordList.length)];
-    log("word=" + word);
+    Log.e(TAG, "word=" + word);
 
     initListener = new OnInitListener() {
       @Override
       public void onInit(int status) {
-        log("OnInitListener.onInit(" + status + ")");
+        Log.e(TAG, "OnInitListener.onInit(" + status + ")");
         if (status == TextToSpeech.SUCCESS) {
           tts.speak("Spell: " + word, TextToSpeech.QUEUE_ADD, null);
         } else {
-          log("OnInitListener.onInit(ERROR = " + status + ")");
+          Log.e(TAG, "OnInitListener.onInit(ERROR = " + status + ")");
         }
       }
     };
@@ -81,11 +80,10 @@ public class TrainActivity extends Activity {
     if (requestCode == MY_DATA_CHECK_CODE) {
       if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
         // success, create the TTS instance
-        //        tts = new TextToSpeech(this, initListener);
         tts = new TextToSpeech(getApplicationContext(), initListener);
       } else {
         // missing data, install it
-        log("missing data");
+        Log.e(TAG, "Missing TTS data");
         Intent installIntent = new Intent();
         installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
         startActivity(installIntent);
@@ -109,10 +107,6 @@ public class TrainActivity extends Activity {
     } else {
       tts.speak(text + "? That's incorrect. Spell: " + word, TextToSpeech.QUEUE_ADD, null);
     }
-  }
-
-  protected void log(String text) {
-    logArea.setText(text + "\n" + logArea.getText());
   }
 
   public void onPlayClick(View view) {

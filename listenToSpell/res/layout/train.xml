@@ -31,7 +31,4 @@
       android:text="@string/submit_button" android:id="@+id/done_button"
       android:layout_width="wrap_content"></Button>
   </RelativeLayout>
-  <EditText android:layout_width="match_parent"
-    android:inputType="textMultiLine" android:id="@+id/log_area"
-    android:layout_height="130dp"></EditText>
 </LinearLayout>

@@ -10,20 +10,16 @@ import android.widget.EditText;
 public class EnterWordsActivity extends Activity {
   private EditText wordListEditText;
 
-  private EditText logArea;
-
   private ListenToSpellApplication listenToSpellApplication;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.enter_words);
-    logArea = (EditText) findViewById(R.id.log_area);
 
     wordListEditText = (EditText) findViewById(R.id.word_list);
 
     listenToSpellApplication = (ListenToSpellApplication) getApplication();
-
 
     String t = listenToSpellApplication.getWordText();
     wordListEditText.setText(t);
@@ -42,10 +38,6 @@ public class EnterWordsActivity extends Activity {
     text = listenToSpellApplication.normalize(text);
     wordListEditText.setText(text);
     listenToSpellApplication.updateWords(text);
-  }
-
-  protected void log(String text) {
-    logArea.setText(text + "\n" + logArea.getText());
   }
 
 }
