@@ -6,11 +6,8 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 
 import java.util.List;
 
@@ -29,6 +26,7 @@ public class TrainActivity extends Activity {
   protected void onResume() {
     super.onResume();
     setView();
+    sayCurrentWord();
   }
 
   private void setView() {
@@ -43,6 +41,18 @@ public class TrainActivity extends Activity {
     }
 
     setContentView(R.layout.train);
+    answerEditText = (EditText) findViewById(R.id.answer_textbox);
+    Log.d(TAG, "*>>>>>>>>>>>>>>>>>>>***********ANS EDIT TEXT = " + answerEditText);
+
+    //    answerEditText.setOnEditorActionListener(new OnEditorActionListener() {
+    //      @Override
+    //      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+    //        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+    //          onDoneClick(v);
+    //        }
+    //        return true;
+    //      }
+    //    });
   }
 
   @Override
@@ -60,20 +70,6 @@ public class TrainActivity extends Activity {
       return;
     }
 
-    setContentView(R.layout.train);
-
-    answerEditText = (EditText) findViewById(R.id.answer_textbox);
-    answerEditText.setOnEditorActionListener(new OnEditorActionListener() {
-
-      @Override
-      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-          onDoneClick(v);
-        }
-        return true;
-      }
-    });
-
     initListener = new OnInitListener() {
       @Override
       public void onInit(int status) {
@@ -81,7 +77,7 @@ public class TrainActivity extends Activity {
         if (status == TextToSpeech.SUCCESS) {
           ttsReady = true;
           setView();
-          say("Spell: " + word, TextToSpeech.QUEUE_ADD);
+          sayCurrentWord();
         } else {
           Log.e(TAG, "OnInitListener.onInit(ERROR = " + status + ")");
         }
@@ -132,8 +128,9 @@ public class TrainActivity extends Activity {
   public void onDoneClick(View view) {
     Log.d(TAG, "onDoneClick()");
     String text = answerEditText.getText().toString();
+    Log.d(TAG, "word=" + word + "; answered=" + answerEditText.getText().toString());
     if (word.equals(text)) {
-      answerEditText.setText("");
+      //      answerEditText.setText("");
       say(text + ". That's right.", TextToSpeech.QUEUE_FLUSH);
       for (int i = 0; i < word.length(); i++) {
         String letter = "" + word.charAt(i);
@@ -144,10 +141,14 @@ public class TrainActivity extends Activity {
         say(letter, TextToSpeech.QUEUE_ADD);
       }
       chooseNewWord();
-      say("Spell: " + word, TextToSpeech.QUEUE_ADD);
+      sayCurrentWord();
     } else {
       say(text + "? That's incorrect. Spell: " + word, TextToSpeech.QUEUE_ADD);
     }
+  }
+
+  private void sayCurrentWord() {
+    say("Spell: " + word, TextToSpeech.QUEUE_ADD);
   }
 
   public void onPlayClick(View view) {
@@ -155,7 +156,10 @@ public class TrainActivity extends Activity {
   }
 
   private void say(String text, int queueMode) {
-    Log.d(TAG, "******************************************** say(" + text + ")");
+    Log.d(TAG, "say(" + text + ")");
+    if (!ttsReady) {
+      return;
+    }
     tts.speak(text, queueMode, null);
   }
 }

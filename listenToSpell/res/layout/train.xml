@@ -15,9 +15,8 @@
       android:gravity="center_horizontal">
       <Button android:layout_width="wrap_content"
         android:onClick="onPlayClick" android:layout_height="wrap_content"
-        android:text="@string/play_button" android:id="@+id/play_button"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"></Button>
+        android:id="@+id/play_button" android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true" android:text="@string/repeat_word_button"></Button>
     </RelativeLayout>
   </LinearLayout>
   <EditText android:layout_width="match_parent"

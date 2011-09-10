@@ -2,7 +2,7 @@
 <resources>
     <string name="hello">Hello there. Welcome to Listen to Spell!</string>
     <string name="app_name">Listen to Spell</string>
-    <string name="play_button">Say word again</string>
+    <string name="repeat_word_button">Repeat word</string>
     <string name="submit_button">Done</string>
     <string name="word_list_heading">Word List:</string>
     <string name="save_button">Save</string>
