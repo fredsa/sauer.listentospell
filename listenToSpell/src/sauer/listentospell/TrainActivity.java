@@ -5,14 +5,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class TrainActivity extends Activity {
 
+  private static final String CLEAR_ANSWER_EDIT_TEXT = "CLEAR_ANSWER_EDIT_TEXT";
   private static final int MY_DATA_CHECK_CODE = 42;
   private static final String TAG = TrainActivity.class.getName();
   private EditText answerEditText;
@@ -41,18 +47,25 @@ public class TrainActivity extends Activity {
     }
 
     setContentView(R.layout.train);
-    answerEditText = (EditText) findViewById(R.id.answer_textbox);
-    Log.d(TAG, "*>>>>>>>>>>>>>>>>>>>***********ANS EDIT TEXT = " + answerEditText);
 
-    //    answerEditText.setOnEditorActionListener(new OnEditorActionListener() {
-    //      @Override
-    //      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-    //        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-    //          onDoneClick(v);
-    //        }
-    //        return true;
-    //      }
-    //    });
+    answerEditText = (EditText) findViewById(R.id.answer_textbox);
+    answerEditText.setOnEditorActionListener(new OnEditorActionListener() {
+      @Override
+      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+          onDoneClick(v);
+        }
+        return true;
+      }
+    });
+
+    getWindow().setSoftInputMode(0);
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    tts.shutdown();
   }
 
   @Override
@@ -76,6 +89,17 @@ public class TrainActivity extends Activity {
         Log.e(TAG, "OnInitListener.onInit(" + status + ")");
         if (status == TextToSpeech.SUCCESS) {
           ttsReady = true;
+
+          tts.setOnUtteranceCompletedListener(new OnUtteranceCompletedListener() {
+            @Override
+            public void onUtteranceCompleted(String utteranceId) {
+              Log.d(TAG, "onUtteranceCompleted(" + utteranceId + ")");
+              if (CLEAR_ANSWER_EDIT_TEXT.equals(utteranceId)) {
+                //                answerEditText.setText("");
+              }
+            }
+          });
+
           setView();
           sayCurrentWord();
         } else {
@@ -105,10 +129,10 @@ public class TrainActivity extends Activity {
     super.onActivityResult(requestCode, resultCode, data);
     switch (requestCode) {
       case MY_DATA_CHECK_CODE:
-        //        log("onActivityResult() resultCode=" + resultCode + "; data=" + data);
+        // log("onActivityResult() resultCode=" + resultCode + "; data=" + data);
         break;
       default:
-        //        log("onActivityResult() requestCode=" + requestCode);
+        // log("onActivityResult() requestCode=" + requestCode);
     }
 
     if (requestCode == MY_DATA_CHECK_CODE) {
@@ -129,37 +153,53 @@ public class TrainActivity extends Activity {
     Log.d(TAG, "onDoneClick()");
     String text = answerEditText.getText().toString();
     Log.d(TAG, "word=" + word + "; answered=" + answerEditText.getText().toString());
+    String say;
     if (word.equals(text)) {
-      //      answerEditText.setText("");
-      say(text + ". That's right.", TextToSpeech.QUEUE_FLUSH);
+      say = "That's right.";
       for (int i = 0; i < word.length(); i++) {
         String letter = "" + word.charAt(i);
         if (letter.equals("a")) {
           letter = "eh"; // say 'eh', not 'uh'
         }
         Log.d(TAG, "letter=" + letter);
-        say(letter, TextToSpeech.QUEUE_ADD);
+        say += " " + letter;
       }
+      say += " spells " + word + ".";
       chooseNewWord();
-      sayCurrentWord();
+      say += "Now spell: " + word;
+      say(say);
     } else {
-      say(text + "? That's incorrect. Spell: " + word, TextToSpeech.QUEUE_ADD);
+      say = text + "? That's incorrect. Spell: " + word;
     }
+    say(say, CLEAR_ANSWER_EDIT_TEXT);
+    answerEditText.setText("");
   }
 
-  private void sayCurrentWord() {
-    say("Spell: " + word, TextToSpeech.QUEUE_ADD);
-  }
-
-  public void onPlayClick(View view) {
-    say(word, TextToSpeech.QUEUE_FLUSH);
-  }
-
-  private void say(String text, int queueMode) {
+  private void say(String text, String utterenceId) {
     Log.d(TAG, "say(" + text + ")");
     if (!ttsReady) {
       return;
     }
-    tts.speak(text, queueMode, null);
+
+    if (utterenceId != null) {
+      HashMap<String, String> map = new HashMap<String, String>();
+      map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utterenceId);
+
+      tts.speak(text, TextToSpeech.QUEUE_FLUSH, map);
+    } else {
+      tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+    }
+  }
+
+  private void sayCurrentWord() {
+    say("Spell: " + word);
+  }
+
+  public void onPlayClick(View view) {
+    say(word);
+  }
+
+  private void say(String text) {
+    say(text, null);
   }
 }
