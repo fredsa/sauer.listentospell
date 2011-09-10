@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class TrainActivity extends Activity {
 
@@ -21,9 +21,29 @@ public class TrainActivity extends Activity {
   private EditText answerEditText;
   private OnInitListener initListener;
   private TextToSpeech tts;
+  private boolean ttsReady;
   private String word;
   private ListenToSpellApplication app;
-  private TextView waitForTtsTextView;
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    setView();
+  }
+
+  private void setView() {
+    if (!app.isSetup()) {
+      setContentView(R.layout.cannot_train);
+      return;
+    }
+
+    if (!ttsReady) {
+      setContentView(R.layout.initializing_tts);
+      return;
+    }
+
+    setContentView(R.layout.train);
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -42,9 +62,9 @@ public class TrainActivity extends Activity {
 
     setContentView(R.layout.train);
 
-    waitForTtsTextView = (TextView) findViewById(R.id.wait_for_tts);
     answerEditText = (EditText) findViewById(R.id.answer_textbox);
     answerEditText.setOnEditorActionListener(new OnEditorActionListener() {
+
       @Override
       public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -59,7 +79,8 @@ public class TrainActivity extends Activity {
       public void onInit(int status) {
         Log.e(TAG, "OnInitListener.onInit(" + status + ")");
         if (status == TextToSpeech.SUCCESS) {
-          waitForTtsTextView.setVisibility(View.GONE);
+          ttsReady = true;
+          setView();
           say("Spell: " + word, TextToSpeech.QUEUE_ADD);
         } else {
           Log.e(TAG, "OnInitListener.onInit(ERROR = " + status + ")");
@@ -71,7 +92,7 @@ public class TrainActivity extends Activity {
   }
 
   private void chooseNewWord() {
-    ArrayList<String> wordList = app.getWordList();
+    List<String> wordList = app.getWordList();
     int idx = (int) (Math.random() * wordList.size());
     word = wordList.size() == 0 ? "" : wordList.get(idx);
     Log.e(TAG, "word=" + word);
@@ -112,6 +133,7 @@ public class TrainActivity extends Activity {
     Log.d(TAG, "onDoneClick()");
     String text = answerEditText.getText().toString();
     if (word.equals(text)) {
+      answerEditText.setText("");
       say(text + ". That's right.", TextToSpeech.QUEUE_FLUSH);
       for (int i = 0; i < word.length(); i++) {
         String letter = "" + word.charAt(i);

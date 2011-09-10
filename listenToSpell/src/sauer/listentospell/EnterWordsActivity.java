@@ -1,6 +1,7 @@
 package sauer.listentospell;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,22 +19,29 @@ public class EnterWordsActivity extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Log.d(TAG, "onCreate()");
+
     setContentView(R.layout.enter_words);
 
     wordListEditText = (EditText) findViewById(R.id.word_list);
 
     listenToSpellApplication = (ListenToSpellApplication) getApplication();
 
-    String t = listenToSpellApplication.getWordText();
-    wordListEditText.setText(t);
+    loadAndShow();
 
     Button saveButton = (Button) findViewById(R.id.word_list_save_button);
     saveButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
         parseAndSave();
+        startActivity(new Intent().setClass(EnterWordsActivity.this, MainActivity.class));
       }
     });
+  }
+
+  private void loadAndShow() {
+    String t = listenToSpellApplication.getWordText();
+    wordListEditText.setText(t);
   }
 
   @Override
@@ -64,6 +72,7 @@ public class EnterWordsActivity extends Activity {
   protected void onResume() {
     super.onResume();
     Log.d(TAG, "onResume()");
+    loadAndShow();
   }
 
   @Override
@@ -77,8 +86,11 @@ public class EnterWordsActivity extends Activity {
     String text = wordListEditText.getText().toString();
     Log.d(TAG, "parseAndSave(" + text + ")");
     text = listenToSpellApplication.normalize(text);
+    Log.d(TAG, "normalized = " + text);
     wordListEditText.setText(text);
-    listenToSpellApplication.updateWords(text);
+    listenToSpellApplication.updateWordText(text);
+
+    Log.d(TAG, "..........reading back what we saved: " + listenToSpellApplication.getWordText());
   }
 
 }
