@@ -31,9 +31,8 @@ public class TrainActivity extends Activity {
   private String word;
   private ListenToSpellApplication app;
   private TextView trainTestStatus;
-  private List<String> wordList;
+  private List<String> allWords;
   private List<String> remainingWords;
-  private ArrayList<String> testWords;
 
   @Override
   protected void onResume() {
@@ -54,7 +53,8 @@ public class TrainActivity extends Activity {
     answerEditText.setOnEditorActionListener(new OnEditorActionListener() {
       @Override
       public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+        Log.d(TAG, "onEditorAction() v=" + v + "; actionId=" + actionId + "; event=" + event);
+        if (event == null || event.getAction() == KeyEvent.ACTION_DOWN) {
           onDoneClick(v);
         }
         return true;
@@ -63,16 +63,29 @@ public class TrainActivity extends Activity {
 
     trainTestStatus = (TextView) findViewById(R.id.train_test_status);
 
-    initWordList();
-    randomizeWords();
-    word = testWords.get(0);
-    Log.d(TAG, "testWords = " + testWords);
-    setStatus();
+    initWordLists();
+    nextWord();
+  }
 
+  private void nextWord() {
+    int cnt = remainingWords.size();
+    if (cnt == 0) {
+      say("Great job!");
+      Intent intent = new Intent().setClass(this, MainActivity.class);
+      startActivity(intent);
+      return;
+    }
+    boolean firstWord = remainingWords.size() == allWords.size();
+    word = remainingWords.remove(random.nextInt(cnt));
+    String say = firstWord ? "Spell" : "Now spell";
+    say += ": " + word;
+    sayNext(say);
+    setStatus();
   }
 
   private void setStatus() {
-    trainTestStatus.setText(testWords.size() + " word(s): " + testWords);
+    trainTestStatus.setText("word=" + word + "; " + remainingWords.size() + " word(s): "
+        + remainingWords);
   }
 
   @Override
@@ -105,7 +118,6 @@ public class TrainActivity extends Activity {
           });
 
           setView();
-          sayCurrentWord();
         } else {
           Log.e(TAG, "OnInitListener.onInit(ERROR = " + status + ")");
         }
@@ -115,24 +127,9 @@ public class TrainActivity extends Activity {
     checkTts();
   }
 
-  private void initWordList() {
-    wordList = app.getWordList();
-    remainingWords = new ArrayList<String>(wordList);
-  }
-
-  private void randomizeWords() {
-    ArrayList<String> t = new ArrayList<String>(remainingWords);
-    testWords = new ArrayList<String>();
-    while (!t.isEmpty()) {
-      testWords.add(t.remove(random.nextInt(t.size())));
-    }
-  }
-
-  private void chooseNewWord() {
-    List<String> wordList = app.getWordList();
-    int idx = (int) (Math.random() * wordList.size());
-    word = wordList.size() == 0 ? "" : wordList.get(idx);
-    Log.e(TAG, "word=" + word);
+  private void initWordLists() {
+    allWords = app.getWordList();
+    remainingWords = new ArrayList<String>(allWords);
   }
 
   private void checkTts() {
@@ -166,29 +163,43 @@ public class TrainActivity extends Activity {
     Log.d(TAG, "onDoneClick()");
     String text = answerEditText.getText().toString();
     Log.d(TAG, "word=" + word + "; answered=" + answerEditText.getText().toString());
-    String say;
     if (word.equals(text)) {
-      say = "That's right.";
-      for (int i = 0; i < word.length(); i++) {
-        String letter = "" + word.charAt(i);
-        if (letter.equals("a")) {
-          letter = "eh"; // say 'eh', not 'uh'
-        }
-        Log.d(TAG, "letter=" + letter);
-        say += " " + letter;
-      }
-      say += " spells " + word + ".";
-      chooseNewWord();
-      say += "Now spell: " + word;
-      say(say);
+      thatIsCorrect();
     } else {
-      say = text + "? That's incorrect. Spell: " + word;
+      thatIsIncorrect(text);
     }
-    say(say, CLEAR_ANSWER_EDIT_TEXT);
     answerEditText.setText("");
   }
 
-  private void say(String text, String utterenceId) {
+  private void thatIsIncorrect(String text) {
+    String say = text + "? That's incorrect. Spell: " + word;
+    sayNow(say, CLEAR_ANSWER_EDIT_TEXT);
+  }
+
+  private void thatIsCorrect() {
+    String say = "That's right.";
+    for (int i = 0; i < word.length(); i++) {
+      String letter = "" + word.charAt(i);
+      if (letter.equals("a")) {
+        letter = "eh"; // say 'eh', not 'uh'
+      }
+      Log.d(TAG, "letter=" + letter);
+      say += " " + letter;
+    }
+    say += " spells " + word + ".";
+    sayNow(say, CLEAR_ANSWER_EDIT_TEXT);
+    nextWord();
+  }
+
+  private void sayNext(String text) {
+    say(text, TextToSpeech.QUEUE_ADD, null);
+  }
+
+  private void sayNow(String text, String utterenceId) {
+    say(text, TextToSpeech.QUEUE_FLUSH, utterenceId);
+  }
+
+  private void say(String text, int queueMode, String utterenceId) {
     Log.d(TAG, "say(" + text + ")");
     if (!ttsReady) {
       return;
@@ -198,9 +209,9 @@ public class TrainActivity extends Activity {
       HashMap<String, String> map = new HashMap<String, String>();
       map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utterenceId);
 
-      tts.speak(text, TextToSpeech.QUEUE_FLUSH, map);
+      tts.speak(text, queueMode, map);
     } else {
-      tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+      tts.speak(text, queueMode, null);
     }
   }
 
@@ -213,6 +224,6 @@ public class TrainActivity extends Activity {
   }
 
   private void say(String text) {
-    say(text, null);
+    sayNow(text, null);
   }
 }
