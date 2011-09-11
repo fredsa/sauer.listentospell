@@ -48,40 +48,30 @@ public class EnterWordsActivity extends Activity {
   protected void onDestroy() {
     super.onDestroy();
     Log.d(TAG, "onDestroy()");
-    Log.d(TAG, "getWindow().getCurrentFocus() ^^^^^^^^^^^^^^^^^^^^^"
-        + getWindow().getCurrentFocus());
   }
 
   @Override
   protected void onStart() {
     super.onStart();
     Log.d(TAG, "onStart()");
-    Log.d(TAG, "getWindow().getCurrentFocus() ^^^^^^^^^^^^^^^^^^^^^"
-        + getWindow().getCurrentFocus());
   }
 
   @Override
   protected void onStop() {
     super.onStart();
     Log.d(TAG, "onStop()");
-    Log.d(TAG, "getWindow().getCurrentFocus() ^^^^^^^^^^^^^^^^^^^^^"
-        + getWindow().getCurrentFocus());
   }
 
   @Override
   protected void onRestart() {
     super.onRestart();
     Log.d(TAG, "onRestart()");
-    Log.d(TAG, "getWindow().getCurrentFocus() ^^^^^^^^^^^^^^^^^^^^^"
-        + getWindow().getCurrentFocus());
   }
 
   @Override
   protected void onResume() {
     super.onResume();
     Log.d(TAG, "onResume()");
-    Log.d(TAG, "getWindow().getCurrentFocus() ^^^^^^^^^^^^^^^^^^^^^"
-        + getWindow().getCurrentFocus());
     loadAndShow();
   }
 
@@ -89,8 +79,6 @@ public class EnterWordsActivity extends Activity {
   protected void onPause() {
     super.onPause();
     Log.d(TAG, "onPause()");
-    Log.d(TAG, "getWindow().getCurrentFocus() ^^^^^^^^^^^^^^^^^^^^^"
-        + getWindow().getCurrentFocus());
     parseAndSave();
   }
 
