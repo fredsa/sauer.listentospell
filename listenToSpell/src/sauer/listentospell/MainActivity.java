@@ -17,7 +17,7 @@ public class MainActivity extends TabActivity {
     Intent intent;
 
     // Train
-    intent = new Intent().setClass(this, TrainActivity.class);
+    intent = new Intent().setClass(this, GetReadyToTrainActivity.class);
     spec = tabHost.newTabSpec("train").setIndicator("Train").setContent(intent);
     tabHost.addTab(spec);
 

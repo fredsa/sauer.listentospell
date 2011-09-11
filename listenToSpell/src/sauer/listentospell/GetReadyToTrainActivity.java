@@ -16,11 +16,11 @@ import android.widget.TextView.OnEditorActionListener;
 import java.util.HashMap;
 import java.util.List;
 
-public class TrainActivity extends Activity {
+public class GetReadyToTrainActivity extends Activity {
 
   private static final String CLEAR_ANSWER_EDIT_TEXT = "CLEAR_ANSWER_EDIT_TEXT";
   private static final int MY_DATA_CHECK_CODE = 42;
-  private static final String TAG = TrainActivity.class.getName();
+  private static final String TAG = GetReadyToTrainActivity.class.getName();
   private EditText answerEditText;
   private OnInitListener initListener;
   private TextToSpeech tts;
