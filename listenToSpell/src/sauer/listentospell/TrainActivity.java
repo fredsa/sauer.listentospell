@@ -13,11 +13,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class TrainActivity extends Activity {
 
+  private static final Random random = new Random();
   private static final String CLEAR_ANSWER_EDIT_TEXT = "CLEAR_ANSWER_EDIT_TEXT";
   private static final int MY_DATA_CHECK_CODE = 42;
   private static final String TAG = TrainActivity.class.getName();
@@ -27,6 +30,10 @@ public class TrainActivity extends Activity {
   private boolean ttsReady;
   private String word;
   private ListenToSpellApplication app;
+  private TextView trainTestStatus;
+  private List<String> wordList;
+  private List<String> remainingWords;
+  private ArrayList<String> testWords;
 
   @Override
   protected void onResume() {
@@ -54,6 +61,18 @@ public class TrainActivity extends Activity {
       }
     });
 
+    trainTestStatus = (TextView) findViewById(R.id.train_test_status);
+
+    initWordList();
+    randomizeWords();
+    word = testWords.get(0);
+    Log.d(TAG, "testWords = " + testWords);
+    setStatus();
+
+  }
+
+  private void setStatus() {
+    trainTestStatus.setText(testWords.size() + " word(s): " + testWords);
   }
 
   @Override
@@ -67,12 +86,6 @@ public class TrainActivity extends Activity {
     super.onCreate(savedInstanceState);
 
     app = (ListenToSpellApplication) getApplication();
-    chooseNewWord();
-
-    if (!app.isSetup()) {
-      setContentView(R.layout.cannot_train);
-      return;
-    }
 
     initListener = new OnInitListener() {
       @Override
@@ -100,6 +113,19 @@ public class TrainActivity extends Activity {
     };
 
     checkTts();
+  }
+
+  private void initWordList() {
+    wordList = app.getWordList();
+    remainingWords = new ArrayList<String>(wordList);
+  }
+
+  private void randomizeWords() {
+    ArrayList<String> t = new ArrayList<String>(remainingWords);
+    testWords = new ArrayList<String>();
+    while (!t.isEmpty()) {
+      testWords.add(t.remove(random.nextInt(t.size())));
+    }
   }
 
   private void chooseNewWord() {
