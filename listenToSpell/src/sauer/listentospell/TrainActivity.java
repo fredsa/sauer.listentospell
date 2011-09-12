@@ -229,7 +229,7 @@ public class TrainActivity extends Activity {
       String letter = "" + word.charAt(i);
       if (letter.equals("a")) {
         letter = "eh"; // say 'eh', not 'uh'
-      }
+      } else
       if (letter.equals("'")) {
         letter = "apostrophe"; // say 'apostrophe', not 'single quote'
       }

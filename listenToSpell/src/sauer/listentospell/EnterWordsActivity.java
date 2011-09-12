@@ -17,8 +17,6 @@ import java.util.ArrayList;
 public class EnterWordsActivity extends Activity {
   private static final String TAG = EnterWordsActivity.class.getName();
 
-  private EditText wordListEditText;
-
   private ListenToSpellApplication app;
 
   private int wordCount;
@@ -34,7 +32,6 @@ public class EnterWordsActivity extends Activity {
 
     setContentView(R.layout.enter_words);
 
-    wordListEditText = (EditText) findViewById(R.id.word_list);
 
     app = (ListenToSpellApplication) getApplication();
 
@@ -85,16 +82,17 @@ public class EnterWordsActivity extends Activity {
 
   private void loadAndShow() {
     String t = app.getWordText();
-    wordListEditText.setText(t);
     ArrayList<String> wordList = app.getWordList();
     int i = 0;
     for (String word : wordList) {
       if (editText.size() < wordList.size()) {
         addWordRow();
       }
+      Log.d(TAG, i + "::::::::::" + word);
       editText.get(i).setText(word);
       i++;
     }
+    // TODO remove blank spots due to duplicate words
   }
 
   @Override
@@ -136,12 +134,11 @@ public class EnterWordsActivity extends Activity {
   }
 
   private void parseAndSave() {
-    String text = wordListEditText.getText().toString();
+    String text = "";
     for (EditText et : editText) {
       text += " " + et.getText().toString();
     }
     Log.d(TAG, "parseAndSave(" + text + ")");
-    wordListEditText.setText(text);
     app.updateWordText(text);
 
     Log.d(TAG, "..........reading back what we saved: " + app.getWordText());

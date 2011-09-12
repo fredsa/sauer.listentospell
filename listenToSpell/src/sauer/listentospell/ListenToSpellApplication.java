@@ -57,7 +57,7 @@ public class ListenToSpellApplication extends Application {
   }
 
   private final ArrayList<String> split(String text) {
-    String[] arr = text.split("[^a-zA-Z-']");
+    String[] arr = text.trim().split("[^a-zA-Z-']");
     if (arr.length == 1 && arr[0].length() == 0) {
       return new ArrayList<String>();
     }
