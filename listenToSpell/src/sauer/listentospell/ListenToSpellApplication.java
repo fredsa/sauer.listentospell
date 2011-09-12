@@ -14,7 +14,7 @@ public class ListenToSpellApplication extends Application {
   private static final String TAG = ListenToSpellApplication.class.getName();
   private SharedPreferences prefs;
 
-  public List<String> getWordList() {
+  public ArrayList<String> getWordList() {
     return split(getWordText());
   }
 
@@ -51,12 +51,12 @@ public class ListenToSpellApplication extends Application {
     return t.toString();
   }
 
-  private final List<String> split(String text) {
+  private final ArrayList<String> split(String text) {
     String[] arr = text.split("[^a-zA-Z-']");
     if (arr.length == 1 && arr[0].length() == 0) {
       return new ArrayList<String>();
     }
-    return Arrays.asList(arr);
+    return new ArrayList<String>(Arrays.asList(arr));
   }
 
   public boolean isSetup() {

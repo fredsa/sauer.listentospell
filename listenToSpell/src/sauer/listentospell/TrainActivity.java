@@ -18,7 +18,6 @@ import android.widget.TextView.OnEditorActionListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 public class TrainActivity extends Activity {
@@ -34,8 +33,8 @@ public class TrainActivity extends Activity {
   private String word;
   private ListenToSpellApplication app;
   private TextView trainTestStatus;
-  private List<String> allWords;
-  private List<String> remainingWords;
+  private ArrayList<String> allWords;
+  private ArrayList<String> remainingWords;
 
   private TextWatcher textWatcher = new TextWatcher() {
 
@@ -57,7 +56,6 @@ public class TrainActivity extends Activity {
   protected void onResume() {
     super.onResume();
     setView();
-    sayCurrentWord();
   }
 
   protected void colorAnswerEditText() {
@@ -130,7 +128,7 @@ public class TrainActivity extends Activity {
   }
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
+  public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     app = (ListenToSpellApplication) getApplication();
@@ -153,17 +151,36 @@ public class TrainActivity extends Activity {
           });
 
           setView();
-          nextWord();
+          if (savedInstanceState == null) {
+            nextWord();
+          }
+          sayCurrentWord();
         } else {
           Log.e(TAG, "OnInitListener.onInit(ERROR = " + status + ")");
         }
       }
     };
 
-    initWordLists();
+    if (savedInstanceState != null) {
+      allWords = savedInstanceState.getStringArrayList("allWords");
+      remainingWords = savedInstanceState.getStringArrayList("remainingWords");
+      word = savedInstanceState.getString("word");
+    } else {
+      initWordLists();
+    }
+
     //    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
     checkTts();
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putStringArrayList("allWords", allWords);
+    outState.putStringArrayList("remainingWords", remainingWords);
+    outState.putString("word", word);
+    Log.d(TAG, "onSaveInstanceState()");
   }
 
   private void initWordLists() {
