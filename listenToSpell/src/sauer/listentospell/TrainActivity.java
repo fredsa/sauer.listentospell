@@ -2,10 +2,13 @@ package sauer.listentospell;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -34,11 +37,38 @@ public class TrainActivity extends Activity {
   private List<String> allWords;
   private List<String> remainingWords;
 
+  private TextWatcher textWatcher = new TextWatcher() {
+
+    @Override
+    public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+    }
+
+    @Override
+    public void afterTextChanged(Editable arg0) {
+      colorAnswerEditText();
+    }
+  };
+
   @Override
   protected void onResume() {
     super.onResume();
     setView();
     sayCurrentWord();
+  }
+
+  protected void colorAnswerEditText() {
+    String answer = answerEditText.getText().toString();
+    int color = Color.BLACK;
+    if (word.equals(answer)) {
+      color = Color.GREEN;
+    } else if (!word.startsWith(answer)) {
+      color = Color.RED;
+    }
+    answerEditText.setTextColor(color);
   }
 
   private void setView() {
@@ -60,17 +90,22 @@ public class TrainActivity extends Activity {
         return true;
       }
     });
-
+    answerEditText.addTextChangedListener(textWatcher);
+    //    answerEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+    //      @Override
+    //      public void onFocusChange(View v, boolean hasFocus) {
+    //        if (hasFocus) {
+    //          getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+    //        }
+    //      }
+    //    });
     trainTestStatus = (TextView) findViewById(R.id.train_test_status);
-
-    initWordLists();
-    nextWord();
   }
 
   private void nextWord() {
     int cnt = remainingWords.size();
     if (cnt == 0) {
-      say("Great job!");
+      sayNext("Great job!");
       Intent intent = new Intent().setClass(this, MainActivity.class);
       startActivity(intent);
       return;
@@ -84,8 +119,8 @@ public class TrainActivity extends Activity {
   }
 
   private void setStatus() {
-    trainTestStatus.setText("word=" + word + "; " + remainingWords.size() + " word(s): "
-        + remainingWords);
+    trainTestStatus.setText(1 + remainingWords.size() + "/" + allWords.size() + " words remaining");
+    Log.d(TAG, "word=" + word + "; " + remainingWords.size() + " word(s): " + remainingWords);
   }
 
   @Override
@@ -118,11 +153,15 @@ public class TrainActivity extends Activity {
           });
 
           setView();
+          nextWord();
         } else {
           Log.e(TAG, "OnInitListener.onInit(ERROR = " + status + ")");
         }
       }
     };
+
+    initWordLists();
+    //    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
     checkTts();
   }
@@ -177,17 +216,19 @@ public class TrainActivity extends Activity {
   }
 
   private void thatIsCorrect() {
-    String say = "That's right.";
+    sayNext("That's right");
     for (int i = 0; i < word.length(); i++) {
       String letter = "" + word.charAt(i);
       if (letter.equals("a")) {
         letter = "eh"; // say 'eh', not 'uh'
       }
+      if (letter.equals("'")) {
+        letter = "apostrophe"; // say 'apostrophe', not 'single quote'
+      }
       Log.d(TAG, "letter=" + letter);
-      say += " " + letter;
+      sayNext(letter);
     }
-    say += " spells " + word + ".";
-    sayNow(say, CLEAR_ANSWER_EDIT_TEXT);
+    sayNext(" spells " + word + ".");
     nextWord();
   }
 
@@ -216,14 +257,10 @@ public class TrainActivity extends Activity {
   }
 
   private void sayCurrentWord() {
-    say("Spell: " + word);
+    sayNext("Spell: " + word);
   }
 
   public void onPlayClick(View view) {
-    say(word);
-  }
-
-  private void say(String text) {
-    sayNow(text, null);
+    sayNext(word);
   }
 }
