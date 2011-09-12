@@ -4,10 +4,10 @@
   android:layout_height="match_parent" android:weightSum="1">
   <TextView android:id="@+id/textView1" android:layout_width="wrap_content"
     android:layout_height="wrap_content" android:text="@string/word_list_heading"></TextView>
-  <EditText android:layout_height="wrap_content"
-    android:layout_width="match_parent" android:layout_weight="0.36"
-    android:id="@+id/word_list" android:inputType="text|textMultiLine|textAutoComplete|textAutoCorrect">
-    <requestFocus></requestFocus>
+  <EditText android:layout_width="match_parent"
+    android:layout_weight="0.36" android:id="@+id/word_list"
+    android:inputType="text|textMultiLine|textAutoComplete|textAutoCorrect"
+    android:layout_height="30sp">
   </EditText>
   <RelativeLayout android:layout_height="wrap_content"
     android:id="@+id/relativeLayout1" android:layout_width="match_parent">

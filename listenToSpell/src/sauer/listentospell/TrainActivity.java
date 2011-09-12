@@ -89,15 +89,8 @@ public class TrainActivity extends Activity {
       }
     });
     answerEditText.addTextChangedListener(textWatcher);
-    //    answerEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-    //      @Override
-    //      public void onFocusChange(View v, boolean hasFocus) {
-    //        if (hasFocus) {
-    //          getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-    //        }
-    //      }
-    //    });
     trainTestStatus = (TextView) findViewById(R.id.train_test_status);
+    //    answerEditText.requestFocus();
   }
 
   private void nextWord() {
@@ -168,8 +161,6 @@ public class TrainActivity extends Activity {
     } else {
       initWordLists();
     }
-
-    //    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
     checkTts();
   }
