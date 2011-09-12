@@ -7,6 +7,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class ListenToSpellApplication extends Application {
@@ -44,10 +45,13 @@ public class ListenToSpellApplication extends Application {
   }
 
   private String normalize(List<String> words) {
+    HashSet<String> seen = new HashSet<String>();
     Log.d(TAG, "normalize(" + words.size() + ")");
     StringBuilder t = new StringBuilder();
     for (String word : words) {
-      t.append(word).append("\n");
+      if (seen.add(word)) {
+        t.append(word).append("\n");
+      }
     }
     return t.toString();
   }

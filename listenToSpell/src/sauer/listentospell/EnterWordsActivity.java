@@ -19,11 +19,13 @@ public class EnterWordsActivity extends Activity {
 
   private EditText wordListEditText;
 
-  private ListenToSpellApplication listenToSpellApplication;
+  private ListenToSpellApplication app;
 
   private int wordCount;
 
   private ArrayList<EditText> editText = new ArrayList<EditText>();
+
+  private LinearLayout linearLayout;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -34,9 +36,7 @@ public class EnterWordsActivity extends Activity {
 
     wordListEditText = (EditText) findViewById(R.id.word_list);
 
-    listenToSpellApplication = (ListenToSpellApplication) getApplication();
-
-    loadAndShow();
+    app = (ListenToSpellApplication) getApplication();
 
     Button saveButton = (Button) findViewById(R.id.word_list_save_button);
     saveButton.setOnClickListener(new OnClickListener() {
@@ -47,21 +47,23 @@ public class EnterWordsActivity extends Activity {
       }
     });
 
-    final LinearLayout ll = (LinearLayout) findViewById(R.id.word_list_linear_layout);
+    linearLayout = (LinearLayout) findViewById(R.id.word_list_linear_layout);
     for (int i = 1; i <= 2; i++) {
-      addWordRow(ll);
+      addWordRow();
     }
     Button addButton = (Button) findViewById(R.id.add_word_row_button);
     addButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View arg0) {
-        addWordRow(ll);
+        addWordRow();
       }
     });
 
+    loadAndShow();
+
   }
 
-  private void addWordRow(LinearLayout ll) {
+  private void addWordRow() {
     LinearLayout container = new LinearLayout(this);
     container.setOrientation(LinearLayout.HORIZONTAL);
 
@@ -75,15 +77,24 @@ public class EnterWordsActivity extends Activity {
     container.addView(tv);
     container.addView(et);
 
-    ll.addView(container, wordCount);
+    linearLayout.addView(container, wordCount);
 
     et.requestFocus();
     wordCount++;
   }
 
   private void loadAndShow() {
-    String t = listenToSpellApplication.getWordText();
+    String t = app.getWordText();
     wordListEditText.setText(t);
+    ArrayList<String> wordList = app.getWordList();
+    int i = 0;
+    for (String word : wordList) {
+      if (editText.size() < wordList.size()) {
+        addWordRow();
+      }
+      editText.get(i).setText(word);
+      i++;
+    }
   }
 
   @Override
@@ -131,9 +142,9 @@ public class EnterWordsActivity extends Activity {
     }
     Log.d(TAG, "parseAndSave(" + text + ")");
     wordListEditText.setText(text);
-    listenToSpellApplication.updateWordText(text);
+    app.updateWordText(text);
 
-    Log.d(TAG, "..........reading back what we saved: " + listenToSpellApplication.getWordText());
+    Log.d(TAG, "..........reading back what we saved: " + app.getWordText());
   }
 
 }
