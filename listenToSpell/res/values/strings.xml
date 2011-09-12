@@ -12,4 +12,5 @@
     <string name="initializing_tts">Initializing TTS...</string>
     <string name="initializing_tts2">Please wait for Text To Speech service to startup...</string>
     <string name="start">Start</string>
+    <string name="add_word_row">Add Word</string>
 </resources>

@@ -6,8 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class EnterWordsActivity extends Activity {
   private static final String TAG = EnterWordsActivity.class.getName();
@@ -15,6 +20,10 @@ public class EnterWordsActivity extends Activity {
   private EditText wordListEditText;
 
   private ListenToSpellApplication listenToSpellApplication;
+
+  private int wordCount;
+
+  private ArrayList<EditText> editText = new ArrayList<EditText>();
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +46,39 @@ public class EnterWordsActivity extends Activity {
         startActivity(new Intent().setClass(EnterWordsActivity.this, MainActivity.class));
       }
     });
+
+    final LinearLayout ll = (LinearLayout) findViewById(R.id.word_list_linear_layout);
+    for (int i = 1; i <= 2; i++) {
+      addWordRow(ll);
+    }
+    Button addButton = (Button) findViewById(R.id.add_word_row_button);
+    addButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View arg0) {
+        addWordRow(ll);
+      }
+    });
+
+  }
+
+  private void addWordRow(LinearLayout ll) {
+    LinearLayout container = new LinearLayout(this);
+    container.setOrientation(LinearLayout.HORIZONTAL);
+
+    TextView tv = new TextView(this);
+    tv.setText(Integer.toString(wordCount + 1) + " ");
+
+    EditText et = new EditText(this);
+    editText.add(et);
+    et.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+
+    container.addView(tv);
+    container.addView(et);
+
+    ll.addView(container, wordCount);
+
+    et.requestFocus();
+    wordCount++;
   }
 
   private void loadAndShow() {
@@ -84,9 +126,10 @@ public class EnterWordsActivity extends Activity {
 
   private void parseAndSave() {
     String text = wordListEditText.getText().toString();
+    for (EditText et : editText) {
+      text += " " + et.getText().toString();
+    }
     Log.d(TAG, "parseAndSave(" + text + ")");
-    text = listenToSpellApplication.normalize(text);
-    Log.d(TAG, "normalized = " + text);
     wordListEditText.setText(text);
     listenToSpellApplication.updateWordText(text);
 

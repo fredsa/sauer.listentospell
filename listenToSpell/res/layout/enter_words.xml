@@ -4,10 +4,8 @@
   android:layout_height="match_parent" android:weightSum="1">
   <TextView android:id="@+id/textView1" android:layout_width="wrap_content"
     android:layout_height="wrap_content" android:text="@string/word_list_heading"></TextView>
-  <EditText android:layout_width="match_parent"
-    android:layout_weight="0.36" android:id="@+id/word_list"
-    android:inputType="text|textMultiLine|textAutoComplete|textAutoCorrect"
-    android:layout_height="30sp">
+  <EditText android:id="@+id/word_list" android:layout_height="wrap_content"
+    android:layout_width="match_parent">
   </EditText>
   <RelativeLayout android:layout_height="wrap_content"
     android:id="@+id/relativeLayout1" android:layout_width="match_parent">
@@ -17,5 +15,14 @@
       android:layout_centerHorizontal="true" android:text="@string/save_button"
       android:id="@+id/word_list_save_button"></Button>
   </RelativeLayout>
+  <ScrollView android:id="@+id/scrollView1"
+    android:layout_height="100sp" android:layout_width="match_parent">
+    <LinearLayout android:layout_height="wrap_content"
+      android:layout_width="match_parent" android:id="@+id/word_list_linear_layout"
+      android:orientation="vertical">
+      <Button android:layout_height="wrap_content" android:id="@+id/add_word_row_button"
+        android:layout_width="wrap_content" android:text="@string/add_word_row"></Button>
+    </LinearLayout>
+  </ScrollView>
 
 </LinearLayout>

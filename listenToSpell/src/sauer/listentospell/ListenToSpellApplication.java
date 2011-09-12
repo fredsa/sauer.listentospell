@@ -22,7 +22,7 @@ public class ListenToSpellApplication extends Application {
     return prefs.getString(WORDLIST, "");
   }
 
-  public String normalize(String text) {
+  private String normalize(String text) {
     Log.d(TAG, "normalize(" + text + ")");
     List<String> words = split(text);
     Log.d(TAG, "words = " + words.size());
@@ -38,6 +38,7 @@ public class ListenToSpellApplication extends Application {
   }
 
   public void updateWordText(String text) {
+    text = normalize(text);
     Log.d(TAG, "updateWordText(" + text + ")");
     prefs.edit().putString(WORDLIST, text).apply();
   }
