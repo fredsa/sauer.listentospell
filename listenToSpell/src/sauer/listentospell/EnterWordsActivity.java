@@ -44,7 +44,7 @@ public class EnterWordsActivity extends Activity {
     });
 
     linearLayout = (LinearLayout) findViewById(R.id.word_list_linear_layout);
-    for (int i = 1; i <= 2; i++) {
+    for (int i = 1; i <= 1; i++) {
       addWordRow();
     }
     Button addButton = (Button) findViewById(R.id.add_word_row_button);
@@ -81,11 +81,14 @@ public class EnterWordsActivity extends Activity {
 
   private void loadAndShow() {
     ArrayList<String> wordList = app.getWordList();
+    Log.d(TAG, "wordList=" + wordList);
+    Log.d(TAG, "editText.size() = " + editText.size());
+    Log.d(TAG, "wordList.size() = " + wordList.size());
+    while (editText.size() < wordList.size()) {
+      addWordRow();
+    }
     int i = 0;
     for (String word : wordList) {
-      if (editText.size() < wordList.size()) {
-        addWordRow();
-      }
       Log.d(TAG, i + "::::::::::" + word);
       editText.get(i).setText(word);
       i++;
@@ -134,7 +137,10 @@ public class EnterWordsActivity extends Activity {
   private void parseAndSave() {
     ArrayList<String> list = new ArrayList<String>();
     for (EditText et : editText) {
-      list.add(et.getText().toString().trim());
+      String word = et.getText().toString().trim();
+      if (word.length() > 0) {
+        list.add(word);
+      }
     }
     Log.d(TAG, "parseAndSave: " + list);
     app.updateWordText(list);
