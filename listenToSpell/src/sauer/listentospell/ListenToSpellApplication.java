@@ -3,65 +3,55 @@ package sauer.listentospell;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 
 public class ListenToSpellApplication extends Application {
   private static final String WORDLIST = "wordlist";
   private static final String TAG = ListenToSpellApplication.class.getName();
-  private SharedPreferences prefs;
+  private SQLiteDatabase sql;
 
   public ArrayList<String> getWordList() {
-    return split(getWordText());
-  }
-
-  public String getWordText() {
-    return prefs.getString(WORDLIST, "");
-  }
-
-  private String normalize(String text) {
-    Log.d(TAG, "normalize(" + text + ")");
-    List<String> words = split(text);
-    Log.d(TAG, "words = " + words.size());
-
-    String t = normalize(words);
-    return t;
+    ArrayList<String> list = new ArrayList<String>();
+    Cursor query = sql.query("wordlist", null, "listname = ?", new String[] {"foo"}, null, null,
+        null);
+    while (query.moveToNext()) {
+      String word = query.getString(1);
+      list.add(word);
+    }
+    return list;
   }
 
   @Override
   public void onCreate() {
     super.onCreate();
-    prefs = getSharedPreferences("listtospell", Context.MODE_PRIVATE);
+    deleteLegacyPrefs();
   }
 
-  public void updateWordText(String text) {
-    text = normalize(text);
-    Log.d(TAG, "updateWordText(" + text + ")");
-    prefs.edit().putString(WORDLIST, text).apply();
+  private void deleteLegacyPrefs() {
+    SharedPreferences prefs = getSharedPreferences("listtospell", Context.MODE_PRIVATE);
+    prefs.edit().remove(WORDLIST).apply();
+    sql = new MySQLiteOpenHelper(this).getWritableDatabase();
   }
 
-  private String normalize(List<String> words) {
+  public void updateWordText(ArrayList<String> list) {
+    Log.d(TAG, "updateWordText(" + list + ")");
+
+    sql.delete("wordlist", "listname = ?", new String[] {"foo"});
     HashSet<String> seen = new HashSet<String>();
-    Log.d(TAG, "normalize(" + words.size() + ")");
-    StringBuilder t = new StringBuilder();
-    for (String word : words) {
+    SQLiteStatement stmt = sql.compileStatement("INSERT INTO wordlist VALUES (?, ?)");
+    for (String word : list) {
       if (seen.add(word)) {
-        t.append(word).append("\n");
+        stmt.bindString(1, "foo");
+        stmt.bindString(2, word);
+        stmt.executeInsert();
       }
     }
-    return t.toString();
-  }
-
-  private final ArrayList<String> split(String text) {
-    String[] arr = text.trim().split("[^a-zA-Z-']");
-    if (arr.length == 1 && arr[0].length() == 0) {
-      return new ArrayList<String>();
-    }
-    return new ArrayList<String>(Arrays.asList(arr));
   }
 
   public boolean isSetup() {

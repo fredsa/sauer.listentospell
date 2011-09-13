@@ -32,7 +32,6 @@ public class EnterWordsActivity extends Activity {
 
     setContentView(R.layout.enter_words);
 
-
     app = (ListenToSpellApplication) getApplication();
 
     Button saveButton = (Button) findViewById(R.id.word_list_save_button);
@@ -81,7 +80,6 @@ public class EnterWordsActivity extends Activity {
   }
 
   private void loadAndShow() {
-    String t = app.getWordText();
     ArrayList<String> wordList = app.getWordList();
     int i = 0;
     for (String word : wordList) {
@@ -134,14 +132,14 @@ public class EnterWordsActivity extends Activity {
   }
 
   private void parseAndSave() {
-    String text = "";
+    ArrayList<String> list = new ArrayList<String>();
     for (EditText et : editText) {
-      text += " " + et.getText().toString();
+      list.add(et.getText().toString().trim());
     }
-    Log.d(TAG, "parseAndSave(" + text + ")");
-    app.updateWordText(text);
+    Log.d(TAG, "parseAndSave: " + list);
+    app.updateWordText(list);
 
-    Log.d(TAG, "..........reading back what we saved: " + app.getWordText());
+    Log.d(TAG, "..........reading back what we saved: " + app.getWordList());
   }
 
 }
