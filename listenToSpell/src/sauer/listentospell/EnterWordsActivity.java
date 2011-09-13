@@ -19,8 +19,6 @@ public class EnterWordsActivity extends Activity {
 
   private ListenToSpellApplication app;
 
-  private int wordCount;
-
   private ArrayList<EditText> editText = new ArrayList<EditText>();
 
   private LinearLayout linearLayout;
@@ -60,23 +58,34 @@ public class EnterWordsActivity extends Activity {
   }
 
   private void addWordRow() {
-    LinearLayout container = new LinearLayout(this);
+    final LinearLayout container = new LinearLayout(this);
     container.setOrientation(LinearLayout.HORIZONTAL);
 
     TextView tv = new TextView(this);
-    tv.setText(Integer.toString(wordCount + 1) + " ");
+    tv.setText(Integer.toString(editText.size() + 1) + " ");
 
-    EditText et = new EditText(this);
+    final EditText et = new EditText(this);
     editText.add(et);
-    et.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+    et.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+        LayoutParams.WRAP_CONTENT, 1));
+
+    Button b = new Button(this);
+    b.setText("X");
+    b.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        linearLayout.removeView(container);
+        editText.remove(et);
+      }
+    });
 
     container.addView(tv);
     container.addView(et);
+    container.addView(b);
 
-    linearLayout.addView(container, wordCount);
+    linearLayout.addView(container, editText.size() - 1);
 
     et.requestFocus();
-    wordCount++;
   }
 
   private void loadAndShow() {
