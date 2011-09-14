@@ -3,13 +3,14 @@ package sauer.listentospell;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -63,12 +64,11 @@ public class EnterWordsActivity extends Activity {
     final LinearLayout rowOneLinearLayout = new LinearLayout(this);
     rowOneLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-    TextView tv = new TextView(this);
-    tv.setText(Integer.toString(editText.size() + 1) + " ");
-
     final EditText wordEditText = new EditText(this);
     editText.add(wordEditText);
     wordEditText.setWidth(300);
+    wordEditText.setHint("word #" + (editText.size() + 1));
+
     //    ViewGroup.LayoutParams.
     //    wordEditText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
     //        LayoutParams.WRAP_CONTENT));
@@ -85,7 +85,6 @@ public class EnterWordsActivity extends Activity {
 
     final EditText descriptionEditText = new EditText(this);
 
-    rowOneLinearLayout.addView(tv);
     rowOneLinearLayout.addView(wordEditText);
     rowOneLinearLayout.addView(removeButton);
 
@@ -94,7 +93,34 @@ public class EnterWordsActivity extends Activity {
 
     linearLayout.addView(masterLinearLayout, editText.size() - 1);
 
+    wordEditText.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count) {
+        updateHints(wordEditText, descriptionEditText, editText.size() + 1);
+      }
+
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+      }
+
+      @Override
+      public void afterTextChanged(Editable s) {
+      }
+    });
+    updateHints(wordEditText, descriptionEditText, editText.size() + 1);
+
     wordEditText.requestFocus();
+  }
+
+  private void updateHints(final EditText wordEditText, final EditText descriptionEditText,
+      int number) {
+    String word = wordEditText.getText().toString();
+    if (word.length() > 0) {
+      descriptionEditText.setHint("Brief sentence using '" + word + "'");
+    } else {
+      wordEditText.setHint("word #" + number);
+      descriptionEditText.setHint("Brief sentence using word #" + number);
+    }
   }
 
   private void loadAndShow() {
