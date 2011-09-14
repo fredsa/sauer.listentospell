@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -58,34 +57,44 @@ public class EnterWordsActivity extends Activity {
   }
 
   private void addWordRow() {
-    final LinearLayout container = new LinearLayout(this);
-    container.setOrientation(LinearLayout.HORIZONTAL);
+    final LinearLayout masterLinearLayout = new LinearLayout(this);
+    masterLinearLayout.setOrientation(LinearLayout.VERTICAL);
+
+    final LinearLayout rowOneLinearLayout = new LinearLayout(this);
+    rowOneLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
     TextView tv = new TextView(this);
     tv.setText(Integer.toString(editText.size() + 1) + " ");
 
-    final EditText et = new EditText(this);
-    editText.add(et);
-    et.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-        LayoutParams.WRAP_CONTENT, 1));
+    final EditText wordEditText = new EditText(this);
+    editText.add(wordEditText);
+    wordEditText.setWidth(300);
+    //    ViewGroup.LayoutParams.
+    //    wordEditText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+    //        LayoutParams.WRAP_CONTENT));
 
-    Button b = new Button(this);
-    b.setText("X");
-    b.setOnClickListener(new OnClickListener() {
+    Button removeButton = new Button(this);
+    removeButton.setText("remove");
+    removeButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        linearLayout.removeView(container);
-        editText.remove(et);
+        linearLayout.removeView(rowOneLinearLayout);
+        editText.remove(wordEditText);
       }
     });
 
-    container.addView(tv);
-    container.addView(et);
-    container.addView(b);
+    final EditText descriptionEditText = new EditText(this);
 
-    linearLayout.addView(container, editText.size() - 1);
+    rowOneLinearLayout.addView(tv);
+    rowOneLinearLayout.addView(wordEditText);
+    rowOneLinearLayout.addView(removeButton);
 
-    et.requestFocus();
+    masterLinearLayout.addView(rowOneLinearLayout);
+    masterLinearLayout.addView(descriptionEditText);
+
+    linearLayout.addView(masterLinearLayout, editText.size() - 1);
+
+    wordEditText.requestFocus();
   }
 
   private void loadAndShow() {
