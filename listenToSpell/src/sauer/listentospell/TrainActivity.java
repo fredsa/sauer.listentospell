@@ -227,17 +227,23 @@ public class TrainActivity extends Activity {
     sayNext("That's right");
     for (int i = 0; i < word.length(); i++) {
       String letter = "" + word.charAt(i);
-      if (letter.equals("a")) {
-        letter = "eh"; // say 'eh', not 'uh'
-      } else
-      if (letter.equals("'")) {
-        letter = "apostrophe"; // say 'apostrophe', not 'single quote'
-      }
       Log.d(TAG, "letter=" + letter);
-      sayNext(letter);
+      String say = pronounce(letter);
+      sayNext(say);
     }
     sayNext(" spells " + word + ".");
     nextWord();
+  }
+
+  private String pronounce(String letter) {
+    if (letter.equals("a")) {
+      letter = "eh";
+    } else if (letter.equals(" ")) {
+      letter = "space";
+    } else if (letter.equals("'")) {
+      letter = "apostrophe";
+    }
+    return letter;
   }
 
   private void sayNext(String text) {

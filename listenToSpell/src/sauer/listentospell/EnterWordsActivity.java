@@ -19,9 +19,12 @@ public class EnterWordsActivity extends Activity {
 
   private ListenToSpellApplication app;
 
-  private ArrayList<EditText> editText = new ArrayList<EditText>();
+  private ArrayList<EditText> wordEditTextList = new ArrayList<EditText>();
+  private ArrayList<EditText> descriptionEditTextList = new ArrayList<EditText>();
 
   private LinearLayout linearLayout;
+
+  private Button addButton;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class EnterWordsActivity extends Activity {
     Log.d(TAG, "onCreate()");
 
     setContentView(R.layout.enter_words);
+    addButton = (Button) findViewById(R.id.add_word_row_button);
 
     app = (ListenToSpellApplication) getApplication();
 
@@ -43,13 +47,12 @@ public class EnterWordsActivity extends Activity {
 
     linearLayout = (LinearLayout) findViewById(R.id.word_list_linear_layout);
     for (int i = 1; i <= 1; i++) {
-      addWordRow();
+      addWordRow(true);
     }
-    Button addButton = (Button) findViewById(R.id.add_word_row_button);
     addButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View arg0) {
-        addWordRow();
+        addWordRow(true);
       }
     });
 
@@ -57,7 +60,9 @@ public class EnterWordsActivity extends Activity {
 
   }
 
-  private void addWordRow() {
+  private void addWordRow(boolean requestFocus) {
+    final int index = wordEditTextList.size();
+
     final LinearLayout masterLinearLayout = new LinearLayout(this);
     masterLinearLayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -65,38 +70,45 @@ public class EnterWordsActivity extends Activity {
     rowOneLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
     final EditText wordEditText = new EditText(this);
-    editText.add(wordEditText);
+    wordEditTextList.add(wordEditText);
+
+    final EditText descriptionEditText = new EditText(this);
+    descriptionEditTextList.add(descriptionEditText);
+
+    wordEditText.setSingleLine();
     wordEditText.setWidth(300);
-    wordEditText.setHint("word #" + (editText.size() + 1));
 
-    //    ViewGroup.LayoutParams.
-    //    wordEditText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-    //        LayoutParams.WRAP_CONTENT));
+    descriptionEditText.setSingleLine();
 
-    Button removeButton = new Button(this);
-    removeButton.setText("remove");
-    removeButton.setOnClickListener(new OnClickListener() {
+    Button deleteButton = new Button(this);
+    deleteButton.setText("delete");
+    deleteButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        linearLayout.removeView(rowOneLinearLayout);
-        editText.remove(wordEditText);
+        wordEditText.setText("");
+        descriptionEditText.setText("");
+        for (int i = 0; i < wordEditTextList.size(); i++) {
+          updateHints(wordEditTextList.get(i), descriptionEditTextList.get(i), i);
+        }
       }
     });
 
-    final EditText descriptionEditText = new EditText(this);
-
     rowOneLinearLayout.addView(wordEditText);
-    rowOneLinearLayout.addView(removeButton);
+    rowOneLinearLayout.addView(deleteButton);
 
     masterLinearLayout.addView(rowOneLinearLayout);
     masterLinearLayout.addView(descriptionEditText);
 
-    linearLayout.addView(masterLinearLayout, editText.size() - 1);
+    linearLayout.addView(masterLinearLayout);
 
     wordEditText.addTextChangedListener(new TextWatcher() {
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
-        updateHints(wordEditText, descriptionEditText, editText.size() + 1);
+        updateHints(wordEditText, descriptionEditText, index);
+        Log.d(TAG, "index=" + index + "; size()=" + wordEditTextList.size());
+        if (index == wordEditTextList.size() - 1 && wordEditText.getText().toString().length() > 0) {
+          addWordRow(false);
+        }
       }
 
       @Override
@@ -107,34 +119,38 @@ public class EnterWordsActivity extends Activity {
       public void afterTextChanged(Editable s) {
       }
     });
-    updateHints(wordEditText, descriptionEditText, editText.size() + 1);
 
-    wordEditText.requestFocus();
+    updateHints(wordEditText, descriptionEditText, index);
+
+    if (requestFocus) {
+      wordEditText.requestFocus();
+    }
   }
 
   private void updateHints(final EditText wordEditText, final EditText descriptionEditText,
       int number) {
     String word = wordEditText.getText().toString();
     if (word.length() > 0) {
-      descriptionEditText.setHint("Brief sentence using '" + word + "'");
+      descriptionEditText.setHint("Enter a brief sentence using '" + word + "' (optional)");
     } else {
-      wordEditText.setHint("word #" + number);
-      descriptionEditText.setHint("Brief sentence using word #" + number);
+      String w = "word #" + (number + 1);
+      wordEditText.setHint(w);
+      descriptionEditText.setHint("Enter a brief sentence using " + w + " (optional)");
     }
   }
 
   private void loadAndShow() {
     ArrayList<String> wordList = app.getWordList();
     Log.d(TAG, "wordList=" + wordList);
-    Log.d(TAG, "editText.size() = " + editText.size());
+    Log.d(TAG, "wordEditTextList.size() = " + wordEditTextList.size());
     Log.d(TAG, "wordList.size() = " + wordList.size());
-    while (editText.size() < wordList.size()) {
-      addWordRow();
+    while (wordEditTextList.size() < wordList.size()) {
+      addWordRow(true);
     }
     int i = 0;
     for (String word : wordList) {
       Log.d(TAG, i + "::::::::::" + word);
-      editText.get(i).setText(word);
+      wordEditTextList.get(i).setText(word);
       i++;
     }
     // TODO remove blank spots due to duplicate words
@@ -180,7 +196,7 @@ public class EnterWordsActivity extends Activity {
 
   private void parseAndSave() {
     ArrayList<String> list = new ArrayList<String>();
-    for (EditText et : editText) {
+    for (EditText et : wordEditTextList) {
       String word = et.getText().toString().trim();
       if (word.length() > 0) {
         list.add(word);
