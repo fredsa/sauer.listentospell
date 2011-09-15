@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -120,10 +121,12 @@ public class EnterWordsActivity extends Activity {
       }
     });
 
+    sentenceEditText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+        | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
     updateHints(wordEditText, sentenceEditText, index);
 
     if (requestFocus) {
-      wordEditText.requestFocus();
+      //      wordEditText.requestFocus();
     }
   }
 
@@ -141,6 +144,20 @@ public class EnterWordsActivity extends Activity {
 
   private void loadAndShow() {
     ArrayList<Tuple> tupleList = app.getTupleList();
+    if (tupleList.isEmpty()) {
+      tupleList.add(new Tuple("fox", "The quick brown fox jumped over the lazy dog"));
+      tupleList.add(new Tuple("wet", "The dog got all wet in the rain"));
+      tupleList.add(new Tuple("nut", "Did you neat the nut I left on the table?"));
+      tupleList.add(new Tuple("job", "Nice job!"));
+      tupleList.add(new Tuple("leg", "I have a left leg and a right one"));
+      tupleList.add(new Tuple("fun", "Have fun at school tomorrow!"));
+      tupleList.add(new Tuple("went", "I went home for dinner"));
+      tupleList.add(new Tuple("mop", "We need a mop to help cleanup"));
+      tupleList.add(new Tuple("hug", "Give your brother a big hug"));
+      tupleList.add(new Tuple("from", "I got a letter from grandma"));
+      tupleList.add(new Tuple("any", "Did you see any penguins?"));
+      tupleList.add(new Tuple("of", "What do you think of that?"));
+    }
     Log.d(TAG, "wordList=" + tupleList);
     Log.d(TAG, "wordEditTextList.size() = " + wordEditTextList.size());
     Log.d(TAG, "wordList.size() = " + tupleList.size());

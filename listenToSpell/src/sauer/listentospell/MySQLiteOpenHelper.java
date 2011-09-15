@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
-  private static final int DATABASE_VERSION = 4;
+  private static final int DATABASE_VERSION = 5;
   private static final String DATABASE_NAME = "listentospell";
   private static final String TAG = MySQLiteOpenHelper.class.getName();
 
@@ -19,7 +19,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
   @Override
   public void onCreate(SQLiteDatabase db) {
     Log.d(TAG, "SQL onCreate()");
-    db.execSQL("CREATE TABLE wordlist (listname TEXT, word TEXT);");
+    db.execSQL("CREATE TABLE wordlist (listname TEXT, word TEXT, sentence TEXT);");
   }
 
   @Override

@@ -40,6 +40,7 @@ public class TrainActivity extends Activity {
 
     @Override
     public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+      partialAnswer = arg0.toString();
     }
 
     @Override
@@ -51,6 +52,7 @@ public class TrainActivity extends Activity {
       colorAnswerEditText();
     }
   };
+  private String partialAnswer;
 
   @Override
   protected void onResume() {
@@ -78,6 +80,7 @@ public class TrainActivity extends Activity {
     setContentView(R.layout.train);
 
     answerEditText = (EditText) findViewById(R.id.answer_textbox);
+    answerEditText.setText(partialAnswer);
     answerEditText.setOnEditorActionListener(new OnEditorActionListener() {
       @Override
       public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -90,7 +93,6 @@ public class TrainActivity extends Activity {
     });
     answerEditText.addTextChangedListener(textWatcher);
     trainTestStatus = (TextView) findViewById(R.id.train_test_status);
-    //    answerEditText.requestFocus();
   }
 
   private void nextWord() {
@@ -106,8 +108,10 @@ public class TrainActivity extends Activity {
     String say = firstWord ? "Spell" : "Now spell";
     say += ": " + tuple.word;
     sayNext(say);
-    sayNext(tuple.sentence);
-    sayNext(tuple.word);
+    if (tuple.sentence.length() > 0) {
+      sayNext(tuple.sentence);
+      sayNext(tuple.word);
+    }
     setStatus();
   }
 
@@ -162,6 +166,7 @@ public class TrainActivity extends Activity {
       remainingTuples = Tuple.toTuples(savedInstanceState.getStringArrayList("remainingTuples"));
       String tupleString = savedInstanceState.getString("tuple");
       tuple = tupleString != null ? new Tuple(tupleString) : null;
+      partialAnswer = savedInstanceState.getString("partialAnswer");
     } else {
       Log.d(TAG, "initWordLists()...");
       initWordLists();
@@ -180,6 +185,9 @@ public class TrainActivity extends Activity {
     outState.putStringArrayList("allWords", Tuple.toString(allWords));
     outState.putStringArrayList("remainingTuples", Tuple.toString(remainingTuples));
     outState.putString("tuple", tuple != null ? tuple.toString() : null);
+    outState.putString("partialAnswer", answerEditText != null
+        ? answerEditText.getText().toString()
+        : null);
     Log.d(TAG, "onSaveInstanceState()");
   }
 
@@ -279,11 +287,9 @@ public class TrainActivity extends Activity {
     }
   }
 
-  private void sayCurrentWord() {
-    sayNext("Spell: " + tuple.word);
-  }
-
-  public void onPlayClick(View view) {
+  public void onRepeatClick(View view) {
+    sayNow(tuple.word, null);
+    sayNext(tuple.sentence);
     sayNext(tuple.word);
   }
 }
