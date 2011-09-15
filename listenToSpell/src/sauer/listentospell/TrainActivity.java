@@ -241,7 +241,7 @@ public class TrainActivity extends Activity {
   }
 
   private void thatIsCorrect() {
-    sayNext("That's right");
+    sayNow("That's right", null);
     for (int i = 0; i < tuple.word.length(); i++) {
       String letter = "" + tuple.word.charAt(i);
       Log.d(TAG, "letter=" + letter);
