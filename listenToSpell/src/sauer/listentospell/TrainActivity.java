@@ -30,11 +30,11 @@ public class TrainActivity extends Activity {
   private OnInitListener initListener;
   private TextToSpeech tts;
   private boolean ttsReady;
-  private String word;
+  private Tuple tuple;
   private ListenToSpellApplication app;
   private TextView trainTestStatus;
-  private ArrayList<String> allWords;
-  private ArrayList<String> remainingWords;
+  private ArrayList<Tuple> allWords;
+  private ArrayList<Tuple> remainingTuples;
 
   private TextWatcher textWatcher = new TextWatcher() {
 
@@ -61,9 +61,9 @@ public class TrainActivity extends Activity {
   protected void colorAnswerEditText() {
     String answer = answerEditText.getText().toString();
     int color = Color.BLACK;
-    if (word.equals(answer)) {
+    if (tuple.word.equals(answer)) {
       color = Color.GREEN;
-    } else if (!word.startsWith(answer)) {
+    } else if (!tuple.word.startsWith(answer)) {
       color = Color.RED;
     }
     answerEditText.setTextColor(color);
@@ -94,24 +94,26 @@ public class TrainActivity extends Activity {
   }
 
   private void nextWord() {
-    int cnt = remainingWords.size();
+    int cnt = remainingTuples.size();
     if (cnt == 0) {
       sayNext("Great job!");
       Intent intent = new Intent().setClass(this, MainActivity.class);
       startActivity(intent);
       return;
     }
-    boolean firstWord = remainingWords.size() == allWords.size();
-    word = remainingWords.remove(random.nextInt(cnt));
+    boolean firstWord = remainingTuples.size() == allWords.size();
+    tuple = remainingTuples.remove(random.nextInt(cnt));
     String say = firstWord ? "Spell" : "Now spell";
-    say += ": " + word;
+    say += ": " + tuple.word;
     sayNext(say);
+    sayNext(tuple.sentence);
+    sayNext(tuple.word);
     setStatus();
   }
 
   private void setStatus() {
-    trainTestStatus.setText(1 + remainingWords.size() + "/" + allWords.size() + " words remaining");
-    Log.d(TAG, "word=" + word + "; " + remainingWords.size() + " word(s): " + remainingWords);
+    trainTestStatus.setText(1 + remainingTuples.size() + "/" + allWords.size() + " words remaining");
+    Log.d(TAG, "tuple=" + tuple + "; " + remainingTuples.size() + " tuple(s): " + remainingTuples);
   }
 
   @Override
@@ -123,6 +125,7 @@ public class TrainActivity extends Activity {
   @Override
   public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Log.d(TAG, "savedInstanceState=" + savedInstanceState);
 
     app = (ListenToSpellApplication) getApplication();
 
@@ -147,36 +150,42 @@ public class TrainActivity extends Activity {
           if (savedInstanceState == null) {
             nextWord();
           }
-          sayCurrentWord();
         } else {
           Log.e(TAG, "OnInitListener.onInit(ERROR = " + status + ")");
         }
       }
     };
 
+    Log.d(TAG, "savedInstanceState==" + savedInstanceState);
     if (savedInstanceState != null) {
-      allWords = savedInstanceState.getStringArrayList("allWords");
-      remainingWords = savedInstanceState.getStringArrayList("remainingWords");
-      word = savedInstanceState.getString("word");
+      allWords = Tuple.toTuples(savedInstanceState.getStringArrayList("allWords"));
+      remainingTuples = Tuple.toTuples(savedInstanceState.getStringArrayList("remainingTuples"));
+      String tupleString = savedInstanceState.getString("tuple");
+      tuple = tupleString != null ? new Tuple(tupleString) : null;
     } else {
+      Log.d(TAG, "initWordLists()...");
       initWordLists();
     }
 
+    Log.d(TAG, "checkTts()...");
+    // May pause current activity
     checkTts();
   }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    outState.putStringArrayList("allWords", allWords);
-    outState.putStringArrayList("remainingWords", remainingWords);
-    outState.putString("word", word);
+    Log.d(TAG, "onSaveInstanceState()");
+
+    outState.putStringArrayList("allWords", Tuple.toString(allWords));
+    outState.putStringArrayList("remainingTuples", Tuple.toString(remainingTuples));
+    outState.putString("tuple", tuple != null ? tuple.toString() : null);
     Log.d(TAG, "onSaveInstanceState()");
   }
 
   private void initWordLists() {
-    allWords = app.getWordList();
-    remainingWords = new ArrayList<String>(allWords);
+    allWords = app.getTupleList();
+    remainingTuples = new ArrayList<Tuple>(allWords);
   }
 
   private void checkTts() {
@@ -209,8 +218,8 @@ public class TrainActivity extends Activity {
   public void onDoneClick(View view) {
     Log.d(TAG, "onDoneClick()");
     String text = answerEditText.getText().toString();
-    Log.d(TAG, "word=" + word + "; answered=" + answerEditText.getText().toString());
-    if (word.equals(text)) {
+    Log.d(TAG, "tuple=" + tuple + "; answered=" + answerEditText.getText().toString());
+    if (tuple.word.equals(text)) {
       thatIsCorrect();
     } else {
       thatIsIncorrect(text);
@@ -219,19 +228,19 @@ public class TrainActivity extends Activity {
   }
 
   private void thatIsIncorrect(String text) {
-    String say = text + "? That's incorrect. Spell: " + word;
+    String say = text + "? That's incorrect. Spell: " + tuple.word;
     sayNow(say, CLEAR_ANSWER_EDIT_TEXT);
   }
 
   private void thatIsCorrect() {
     sayNext("That's right");
-    for (int i = 0; i < word.length(); i++) {
-      String letter = "" + word.charAt(i);
+    for (int i = 0; i < tuple.word.length(); i++) {
+      String letter = "" + tuple.word.charAt(i);
       Log.d(TAG, "letter=" + letter);
       String say = pronounce(letter);
       sayNext(say);
     }
-    sayNext(" spells " + word + ".");
+    sayNext(" spells " + tuple.word + ".");
     nextWord();
   }
 
@@ -271,10 +280,10 @@ public class TrainActivity extends Activity {
   }
 
   private void sayCurrentWord() {
-    sayNext("Spell: " + word);
+    sayNext("Spell: " + tuple.word);
   }
 
   public void onPlayClick(View view) {
-    sayNext(word);
+    sayNext(tuple.word);
   }
 }

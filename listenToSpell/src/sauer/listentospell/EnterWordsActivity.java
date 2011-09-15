@@ -20,7 +20,7 @@ public class EnterWordsActivity extends Activity {
   private ListenToSpellApplication app;
 
   private ArrayList<EditText> wordEditTextList = new ArrayList<EditText>();
-  private ArrayList<EditText> descriptionEditTextList = new ArrayList<EditText>();
+  private ArrayList<EditText> sentenceEditTextList = new ArrayList<EditText>();
 
   private LinearLayout linearLayout;
 
@@ -72,13 +72,13 @@ public class EnterWordsActivity extends Activity {
     final EditText wordEditText = new EditText(this);
     wordEditTextList.add(wordEditText);
 
-    final EditText descriptionEditText = new EditText(this);
-    descriptionEditTextList.add(descriptionEditText);
+    final EditText sentenceEditText = new EditText(this);
+    sentenceEditTextList.add(sentenceEditText);
 
     wordEditText.setSingleLine();
     wordEditText.setWidth(300);
 
-    descriptionEditText.setSingleLine();
+    sentenceEditText.setSingleLine();
 
     Button deleteButton = new Button(this);
     deleteButton.setText("delete");
@@ -86,9 +86,9 @@ public class EnterWordsActivity extends Activity {
       @Override
       public void onClick(View v) {
         wordEditText.setText("");
-        descriptionEditText.setText("");
+        sentenceEditText.setText("");
         for (int i = 0; i < wordEditTextList.size(); i++) {
-          updateHints(wordEditTextList.get(i), descriptionEditTextList.get(i), i);
+          updateHints(wordEditTextList.get(i), sentenceEditTextList.get(i), i);
         }
       }
     });
@@ -97,14 +97,14 @@ public class EnterWordsActivity extends Activity {
     rowOneLinearLayout.addView(deleteButton);
 
     masterLinearLayout.addView(rowOneLinearLayout);
-    masterLinearLayout.addView(descriptionEditText);
+    masterLinearLayout.addView(sentenceEditText);
 
     linearLayout.addView(masterLinearLayout);
 
     wordEditText.addTextChangedListener(new TextWatcher() {
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
-        updateHints(wordEditText, descriptionEditText, index);
+        updateHints(wordEditText, sentenceEditText, index);
         Log.d(TAG, "index=" + index + "; size()=" + wordEditTextList.size());
         if (index == wordEditTextList.size() - 1 && wordEditText.getText().toString().length() > 0) {
           addWordRow(false);
@@ -120,7 +120,7 @@ public class EnterWordsActivity extends Activity {
       }
     });
 
-    updateHints(wordEditText, descriptionEditText, index);
+    updateHints(wordEditText, sentenceEditText, index);
 
     if (requestFocus) {
       wordEditText.requestFocus();
@@ -140,17 +140,18 @@ public class EnterWordsActivity extends Activity {
   }
 
   private void loadAndShow() {
-    ArrayList<String> wordList = app.getWordList();
-    Log.d(TAG, "wordList=" + wordList);
+    ArrayList<Tuple> tupleList = app.getTupleList();
+    Log.d(TAG, "wordList=" + tupleList);
     Log.d(TAG, "wordEditTextList.size() = " + wordEditTextList.size());
-    Log.d(TAG, "wordList.size() = " + wordList.size());
-    while (wordEditTextList.size() < wordList.size()) {
+    Log.d(TAG, "wordList.size() = " + tupleList.size());
+    while (wordEditTextList.size() < tupleList.size()) {
       addWordRow(true);
     }
     int i = 0;
-    for (String word : wordList) {
-      Log.d(TAG, i + "::::::::::" + word);
-      wordEditTextList.get(i).setText(word);
+    for (Tuple tuple : tupleList) {
+      Log.d(TAG, i + "::::::::::" + tuple);
+      wordEditTextList.get(i).setText(tuple.word);
+      sentenceEditTextList.get(i).setText(tuple.sentence);
       i++;
     }
     // TODO remove blank spots due to duplicate words
@@ -195,17 +196,18 @@ public class EnterWordsActivity extends Activity {
   }
 
   private void parseAndSave() {
-    ArrayList<String> list = new ArrayList<String>();
-    for (EditText et : wordEditTextList) {
-      String word = et.getText().toString().trim();
+    ArrayList<Tuple> list = new ArrayList<Tuple>();
+    for (int i = 0; i < wordEditTextList.size(); i++) {
+      String word = wordEditTextList.get(i).getText().toString().trim();
+      String sentence = sentenceEditTextList.get(i).getText().toString().trim();
       if (word.length() > 0) {
-        list.add(word);
+        list.add(new Tuple(word, sentence));
       }
     }
     Log.d(TAG, "parseAndSave: " + list);
-    app.updateWordText(list);
+    app.setTupleList(list);
 
-    Log.d(TAG, "..........reading back what we saved: " + app.getWordList());
+    Log.d(TAG, "..........reading back what we saved: " + app.getTupleList());
   }
 
 }
