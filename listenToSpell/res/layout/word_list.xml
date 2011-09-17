@@ -4,7 +4,7 @@
   android:layout_height="match_parent" android:weightSum="1">
   <TextView android:id="@+id/textView1" android:layout_width="wrap_content"
     android:layout_height="wrap_content" android:text="@string/word_list_heading"></TextView>
-  <ScrollView android:id="@+id/enter_words_scroll_view"
+  <ScrollView android:id="@+id/word_list_scroll_view"
     android:layout_height="match_parent" android:layout_width="match_parent">
     <LinearLayout android:layout_height="wrap_content"
       android:layout_width="match_parent" android:id="@+id/word_list_linear_layout"

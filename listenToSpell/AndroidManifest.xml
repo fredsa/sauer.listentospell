@@ -21,7 +21,7 @@
     <activity android:name=".TrainActivity" android:configChanges="keyboard|keyboardHidden|orientation">
     </activity>
 
-    <activity android:name=".EnterWordsActivity">
+    <activity android:name=".WordListActivity">
     </activity>
 
     <activity android:name=".MyStatsActivity">

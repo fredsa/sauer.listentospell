@@ -12,7 +12,7 @@
       android:layout_height="wrap_content"></TextView>
     <TextView android:id="@+id/textView2"
       android:textAppearance="?android:attr/textAppearanceSmall"
-      android:text="@string/please_click_enter_words_tab"
+      android:text="@string/please_click_word_list_tab"
       android:layout_width="match_parent" android:layout_height="wrap_content"></TextView>
   </LinearLayout>
 </RelativeLayout>

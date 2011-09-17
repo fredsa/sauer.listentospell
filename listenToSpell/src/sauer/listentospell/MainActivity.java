@@ -1,10 +1,10 @@
 package sauer.listentospell;
 
-import sauer.listentospell.app.ListenToSpellApplication;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TabHost;
+import sauer.listentospell.app.ListenToSpellApplication;
 
 public class MainActivity extends TabActivity {
 
@@ -22,9 +22,9 @@ public class MainActivity extends TabActivity {
     spec = tabHost.newTabSpec("train").setIndicator("Train").setContent(intent);
     tabHost.addTab(spec);
 
-    // Enter Words
-    intent = new Intent().setClass(this, EnterWordsActivity.class);
-    spec = tabHost.newTabSpec("entry").setIndicator("Enter Words").setContent(intent);
+    // Word List
+    intent = new Intent().setClass(this, WordListActivity.class);
+    spec = tabHost.newTabSpec("entry").setIndicator("Word List").setContent(intent);
     tabHost.addTab(spec);
 
     // My Stats

@@ -16,8 +16,8 @@ import sauer.listentospell.app.ListenToSpellApplication;
 
 import java.util.ArrayList;
 
-public class EnterWordsActivity extends Activity {
-  private static final String TAG = EnterWordsActivity.class.getName();
+public class WordListActivity extends Activity {
+  private static final String TAG = WordListActivity.class.getName();
 
   private ListenToSpellApplication app;
 
@@ -33,7 +33,7 @@ public class EnterWordsActivity extends Activity {
     super.onCreate(savedInstanceState);
     Log.d(TAG, "onCreate()");
 
-    setContentView(R.layout.enter_words);
+    setContentView(R.layout.word_list);
     addButton = (Button) findViewById(R.id.add_word_row_button);
 
     app = (ListenToSpellApplication) getApplication();
@@ -43,7 +43,7 @@ public class EnterWordsActivity extends Activity {
       @Override
       public void onClick(View v) {
         parseAndSave();
-        startActivity(new Intent().setClass(EnterWordsActivity.this, MainActivity.class));
+        startActivity(new Intent().setClass(WordListActivity.this, MainActivity.class));
       }
     });
 
