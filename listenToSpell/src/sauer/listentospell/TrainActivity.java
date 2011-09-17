@@ -37,7 +37,6 @@ public class TrainActivity extends Activity {
   private ArrayList<Tuple> remainingTuples;
 
   private TextWatcher textWatcher = new TextWatcher() {
-
     @Override
     public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
       partialAnswer = arg0.toString();
@@ -151,26 +150,15 @@ public class TrainActivity extends Activity {
           });
 
           setView();
-          if (savedInstanceState == null) {
-            nextWord();
-          }
+          nextWord();
         } else {
           Log.e(TAG, "OnInitListener.onInit(ERROR = " + status + ")");
         }
       }
     };
 
-    Log.d(TAG, "savedInstanceState==" + savedInstanceState);
-    if (savedInstanceState != null) {
-      allWords = Tuple.toTuples(savedInstanceState.getStringArrayList("allWords"));
-      remainingTuples = Tuple.toTuples(savedInstanceState.getStringArrayList("remainingTuples"));
-      String tupleString = savedInstanceState.getString("tuple");
-      tuple = tupleString != null ? new Tuple(tupleString) : null;
-      partialAnswer = savedInstanceState.getString("partialAnswer");
-    } else {
-      Log.d(TAG, "initWordLists()...");
-      initWordLists();
-    }
+    Log.d(TAG, "initWordLists()...");
+    initWordLists();
 
     Log.d(TAG, "checkTts()...");
     // May pause current activity
@@ -180,14 +168,6 @@ public class TrainActivity extends Activity {
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    Log.d(TAG, "onSaveInstanceState()");
-
-    outState.putStringArrayList("allWords", Tuple.toString(allWords));
-    outState.putStringArrayList("remainingTuples", Tuple.toString(remainingTuples));
-    outState.putString("tuple", tuple != null ? tuple.toString() : null);
-    outState.putString("partialAnswer", answerEditText != null
-        ? answerEditText.getText().toString()
-        : null);
     Log.d(TAG, "onSaveInstanceState()");
   }
 

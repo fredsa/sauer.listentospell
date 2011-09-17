@@ -145,18 +145,42 @@ public class EnterWordsActivity extends Activity {
   private void loadAndShow() {
     ArrayList<Tuple> tupleList = app.getTupleList();
     if (tupleList.isEmpty()) {
-      tupleList.add(new Tuple("fox", "The quick brown fox jumped over the lazy dog"));
-      tupleList.add(new Tuple("wet", "The dog got all wet in the rain"));
-      tupleList.add(new Tuple("nut", "Did you neat the nut I left on the table?"));
-      tupleList.add(new Tuple("job", "Nice job!"));
-      tupleList.add(new Tuple("leg", "I have a left leg and a right one"));
-      tupleList.add(new Tuple("fun", "Have fun at school tomorrow!"));
-      tupleList.add(new Tuple("went", "I went home for dinner"));
-      tupleList.add(new Tuple("mop", "We need a mop to help cleanup"));
-      tupleList.add(new Tuple("hug", "Give your brother a big hug"));
-      tupleList.add(new Tuple("from", "I got a letter from grandma"));
-      tupleList.add(new Tuple("any", "Did you see any penguins?"));
-      tupleList.add(new Tuple("of", "What do you think of that?"));
+
+      //      tupleList = new ArrayList<Tuple>();
+      //      tupleList.add(new Tuple("fox", "The quick brown fox jumped over the lazy dog"));
+      //      tupleList.add(new Tuple("wet", "The dog got all wet in the rain"));
+      //      tupleList.add(new Tuple("nut", "Did you neat the nut I left on the table?"));
+      //      tupleList.add(new Tuple("job", "Nice job!"));
+      //      tupleList.add(new Tuple("leg", "I have a left leg and a right one"));
+      //      tupleList.add(new Tuple("fun", "Have fun at school tomorrow!"));
+      //      tupleList.add(new Tuple("went", "I went home for dinner"));
+      //      tupleList.add(new Tuple("mop", "We need a mop to help cleanup"));
+      //      tupleList.add(new Tuple("hug", "Give your brother a big hug"));
+      //      tupleList.add(new Tuple("from", "I got a letter from grandma"));
+      //      tupleList.add(new Tuple("any", "Did you see any penguins?"));
+      //      tupleList.add(new Tuple("of", "What do you think of that?"));
+
+      //      tupleList = new ArrayList<Tuple>();
+      //      tupleList.add(new Tuple("cocoon", "Catepillars use cocoons to turn into butterflies"));
+      //      tupleList.add(new Tuple("tissue", "I need a tissue because I'm going to sneeze"));
+      //      tupleList.add(new Tuple("excuse", "I need to excude myself to go to the bathroom"));
+      //      tupleList.add(new Tuple("brew", "Let's brew some tea"));
+      //      tupleList.add(new Tuple("confuse", "Do not confuse him"));
+      //      tupleList.add(new Tuple("bruise", "I got a bruise in tennis"));
+      //      tupleList.add(new Tuple("pollute", "Do not pollute the seas"));
+      //      tupleList.add(new Tuple("stew", "I would like some stew to eat"));
+      //      tupleList.add(new Tuple("lose", "Be careful not to lose that gumball"));
+      //      tupleList.add(new Tuple("loose", "I have a loose tooth"));
+      //      tupleList.add(new Tuple("chute", "Go down the chute"));
+      //      tupleList.add(new Tuple("suit", "Nice suit"));
+      //      tupleList.add(new Tuple("fuel", "The car needs fuel to run"));
+      //      tupleList.add(new Tuple("proof", "I have proof that he's innocent"));
+      //      tupleList.add(new Tuple("prove", "I can prove that this answer is correct"));
+      //      tupleList.add(new Tuple("whose", "Whose ice cream sandwich is that?"));
+      //      tupleList.add(new Tuple("who's", "Who's going to eat that ice cream sandwich?"));
+      //      tupleList.add(new Tuple("school", "I had fun at school today"));
+      //      tupleList.add(new Tuple("include", "I want to include my brother in this game"));
+      //      tupleList.add(new Tuple("scoop", "Let's have a scoop of ice cream"));
     }
     Log.d(TAG, "wordList=" + tupleList);
     Log.d(TAG, "wordEditTextList.size() = " + wordEditTextList.size());
