@@ -2,6 +2,7 @@ package sauer.listentospell;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -79,6 +80,7 @@ public class WordListActivity extends Activity {
 
     wordEditText.setSingleLine();
     wordEditText.setWidth(300);
+    wordEditText.setTypeface(Typeface.DEFAULT_BOLD);
 
     sentenceEditText.setSingleLine();
 
