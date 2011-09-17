@@ -1,5 +1,6 @@
 package sauer.listentospell;
 
+import sauer.listentospell.app.ListenToSpellApplication;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;

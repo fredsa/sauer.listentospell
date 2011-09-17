@@ -5,7 +5,7 @@
   <uses-sdk android:minSdkVersion="10" />
 
   <application android:icon="@drawable/icon" android:label="@string/app_name"
-    android:debuggable="true" android:name="ListenToSpellApplication">
+    android:debuggable="true" android:name=".app.ListenToSpellApplication">
 
     <activity android:name=".MainActivity" android:theme="@android:style/Theme.NoTitleBar"
       android:label="@string/app_name" android:windowSoftInputMode="stateVisible|adjustResize"  android:configChanges="keyboard|keyboardHidden|orientation">

@@ -1,5 +1,6 @@
-package sauer.listentospell;
+package sauer.listentospell.app;
 
+import sauer.listentospell.Tuple;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
