@@ -13,4 +13,5 @@
     <string name="initializing_tts2">Please wait for Text To Speech service to startup...</string>
     <string name="start">Start</string>
     <string name="add_word_row">Add Word</string>
+    <string name="get_read_to_train_text_view">Are you ready to test yourself?</string>
 </resources>
