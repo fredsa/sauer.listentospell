@@ -1,6 +1,5 @@
 package sauer.listentospell;
 
-import sauer.listentospell.app.ListenToSpellApplication;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import sauer.listentospell.app.ListenToSpellApplication;
 
 import java.util.ArrayList;
 
@@ -162,15 +162,15 @@ public class EnterWordsActivity extends Activity {
       //      tupleList.add(new Tuple("of", "What do you think of that?"));
 
       //      tupleList = new ArrayList<Tuple>();
-      //      tupleList.add(new Tuple("cocoon", "Catepillars use cocoons to turn into butterflies"));
+      //      tupleList.add(new Tuple("cocoon", "Caterpillars use cocoons to turn into butterflies"));
       //      tupleList.add(new Tuple("tissue", "I need a tissue because I'm going to sneeze"));
-      //      tupleList.add(new Tuple("excuse", "I need to excude myself to go to the bathroom"));
+      //      tupleList.add(new Tuple("excuse", "I need to excuse myself to go to the bathroom"));
       //      tupleList.add(new Tuple("brew", "Let's brew some tea"));
       //      tupleList.add(new Tuple("confuse", "Do not confuse him"));
       //      tupleList.add(new Tuple("bruise", "I got a bruise in tennis"));
       //      tupleList.add(new Tuple("pollute", "Do not pollute the seas"));
       //      tupleList.add(new Tuple("stew", "I would like some stew to eat"));
-      //      tupleList.add(new Tuple("lose", "Be careful not to lose that gumball"));
+      //      tupleList.add(new Tuple("lose", "Be careful not to lose that gum ball"));
       //      tupleList.add(new Tuple("loose", "I have a loose tooth"));
       //      tupleList.add(new Tuple("chute", "Go down the chute"));
       //      tupleList.add(new Tuple("suit", "Nice suit"));
