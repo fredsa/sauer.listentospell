@@ -1,6 +1,5 @@
 package sauer.listentospell.app;
 
-import sauer.listentospell.Tuple;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
+import sauer.listentospell.Tuple;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,12 +33,12 @@ public class ListenToSpellApplication extends Application {
   public void onCreate() {
     super.onCreate();
     deleteLegacyPrefs();
+    sql = new MySQLiteOpenHelper(this).getWritableDatabase();
   }
 
   private void deleteLegacyPrefs() {
     SharedPreferences prefs = getSharedPreferences("listtospell", Context.MODE_PRIVATE);
     prefs.edit().remove(WORDLIST).apply();
-    sql = new MySQLiteOpenHelper(this).getWritableDatabase();
   }
 
   public void setTupleList(ArrayList<Tuple> list) {
@@ -59,6 +59,17 @@ public class ListenToSpellApplication extends Application {
 
   public boolean isSetup() {
     return !getTupleList().isEmpty();
+  }
+
+  public ArrayList<String> getListNames() {
+    ArrayList<String> list = new ArrayList<String>();
+    Cursor query = sql.query("wordlist", new String[] {"listname"}, null, null, "listname", null,
+        null);
+    while (query.moveToNext()) {
+      String listName = query.getString(0);
+      list.add(listName);
+    }
+    return list;
   }
 
 }

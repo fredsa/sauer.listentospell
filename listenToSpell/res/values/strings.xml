@@ -16,4 +16,6 @@
     <string name="get_read_to_train_text_view">Are you ready to test yourself?</string>
     <string name="word_lists">Word Lists</string>
     <string name="new_word_list">+ New List</string>
+    <string name="word_list_item_edit_text">Edit</string>
+    <string name="word_list_item_take_test">Test Me</string>
 </resources>

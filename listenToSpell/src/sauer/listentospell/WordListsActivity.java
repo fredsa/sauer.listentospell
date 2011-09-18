@@ -1,12 +1,16 @@
 package sauer.listentospell;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import sauer.listentospell.app.ListenToSpellApplication;
+
+import java.util.ArrayList;
 
 public class WordListsActivity extends Activity {
   private static final String TAG = WordListsActivity.class.getName();
@@ -29,21 +33,53 @@ public class WordListsActivity extends Activity {
     addWordListButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View arg0) {
-        addWordList();
+        addWordList("New List");
       }
-
     });
 
     loadAndShow();
   }
 
-  private void addWordList() {
-    Button button = new Button(this);
-    button.setText("New List");
-    linearLayout.addView(button, 0);
+  private void addWordList(String listName) {
+    //    Button button = new Button(this);
+    //    button.setText(listName);
+    //    linearLayout.addView(button);
+
+    //    LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+
+    View item = View.inflate(this, R.layout.word_list_item, null);
+    linearLayout.addView(item);
+
+    TextView word = (TextView) item.findViewById(R.id.word_list_item_word);
+
+    Button editButton = (Button) item.findViewById(R.id.word_list_item_edit_button);
+    editButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(app, WordListActivity.class);
+        startActivity(intent);
+      }
+    });
+
+    Button takeTestButton = (Button) item.findViewById(R.id.word_list_item_take_test);
+    takeTestButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(app, TrainActivity.class);
+        startActivity(intent);
+      }
+    });
+
+    word.setText(listName);
   }
 
   private void loadAndShow() {
+    ArrayList<String> list = app.getListNames();
+    for (String listName : list) {
+      addWordList(listName);
+      addWordList(listName);
+      addWordList(listName);
+    }
   }
 
 }
