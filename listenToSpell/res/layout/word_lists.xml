@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical" android:layout_width="match_parent"
+  android:layout_height="match_parent">
+  <TextView android:text="@string/word_lists"
+    android:layout_height="wrap_content" android:layout_width="wrap_content"
+    android:id="@+id/textView1"></TextView>
+  <Button android:text="@string/new_word_list"
+    android:layout_height="wrap_content" android:layout_width="wrap_content"
+    android:id="@+id/add_word_list_button"></Button>
+  <ScrollView android:id="@+id/scrollView1"
+    android:layout_height="wrap_content" android:layout_width="match_parent">
+    <LinearLayout android:id="@+id/linearLayout1"
+      android:layout_width="match_parent" android:layout_height="match_parent">
+      <LinearLayout android:id="@+id/word_lists_linear_layout"
+        android:layout_height="match_parent" android:orientation="vertical"
+        android:layout_width="match_parent"></LinearLayout>
+    </LinearLayout>
+  </ScrollView>
+
+</LinearLayout>

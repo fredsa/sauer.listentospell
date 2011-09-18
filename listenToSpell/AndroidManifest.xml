@@ -24,6 +24,9 @@
     <activity android:name=".WordListActivity">
     </activity>
 
+    <activity android:name=".WordListsActivity">
+    </activity>
+
     <activity android:name=".MyStatsActivity">
     </activity>
 

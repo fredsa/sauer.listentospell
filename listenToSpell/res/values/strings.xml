@@ -14,4 +14,6 @@
     <string name="start">Start</string>
     <string name="add_word_row">Add Word</string>
     <string name="get_read_to_train_text_view">Are you ready to test yourself?</string>
+    <string name="word_lists">Word Lists</string>
+    <string name="new_word_list">+ New List</string>
 </resources>
