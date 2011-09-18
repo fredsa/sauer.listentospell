@@ -38,7 +38,9 @@ public class WordListsActivity extends Activity {
   }
 
   private void addWordList() {
-
+    Button button = new Button(this);
+    button.setText("New List");
+    linearLayout.addView(button, 0);
   }
 
   private void loadAndShow() {
