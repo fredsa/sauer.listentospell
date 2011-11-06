@@ -10,7 +10,6 @@ import android.widget.Button;
 
 public class GetReadyToTrainActivity extends Activity {
 
-  private static final String TAG = GetReadyToTrainActivity.class.getName();
   private Button startTrainingButton;
   private ListenToSpellApplication app;
 

@@ -17,9 +17,9 @@ public class ListenToSpellApplication extends Application {
   private static final String TAG = ListenToSpellApplication.class.getName();
   private SQLiteDatabase sql;
 
-  public ArrayList<Tuple> getTupleList() {
+  public ArrayList<Tuple> getTupleList(String listname) {
     ArrayList<Tuple> list = new ArrayList<Tuple>();
-    Cursor query = sql.query("wordlist", null, "listname = ?", new String[] {"foo"}, null, null,
+    Cursor query = sql.query("wordlist", null, "listname = ?", new String[] {listname}, null, null,
         null);
     while (query.moveToNext()) {
       String word = query.getString(1);
@@ -41,15 +41,15 @@ public class ListenToSpellApplication extends Application {
     prefs.edit().remove(WORDLIST).apply();
   }
 
-  public void setTupleList(ArrayList<Tuple> list) {
+  public void setTupleList(String listname, ArrayList<Tuple> list) {
     Log.d(TAG, "updateWordText(" + list + ")");
 
-    sql.delete("wordlist", "listname = ?", new String[] {"foo"});
+    sql.delete("wordlist", "listname = ?", new String[] {listname});
     HashSet<String> seen = new HashSet<String>();
     SQLiteStatement stmt = sql.compileStatement("INSERT INTO wordlist VALUES (?, ?, ?)");
     for (Tuple tuple : list) {
       if (seen.add(tuple.word)) {
-        stmt.bindString(1, "foo");
+        stmt.bindString(1, listname);
         stmt.bindString(2, tuple.word);
         stmt.bindString(3, tuple.sentence);
         stmt.executeInsert();
@@ -58,7 +58,7 @@ public class ListenToSpellApplication extends Application {
   }
 
   public boolean isSetup() {
-    return !getTupleList().isEmpty();
+    return !getListNames().isEmpty();
   }
 
   public ArrayList<String> getListNames() {

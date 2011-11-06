@@ -53,6 +53,7 @@ public class TrainActivity extends Activity {
     }
   };
   private String partialAnswer;
+  private String listName;
 
   @Override
   protected void onResume() {
@@ -131,6 +132,9 @@ public class TrainActivity extends Activity {
     super.onCreate(savedInstanceState);
     Log.d(TAG, "savedInstanceState=" + savedInstanceState);
 
+    listName = getIntent().getStringExtra("listName");
+    Log.d(TAG, "getIntent().getStringExtra(\"listName\") = " + listName);
+
     app = (ListenToSpellApplication) getApplication();
 
     initListener = new OnInitListener() {
@@ -159,7 +163,7 @@ public class TrainActivity extends Activity {
     };
 
     Log.d(TAG, "initWordLists()...");
-    initWordLists();
+    initWordLists(listName);
 
     Log.d(TAG, "checkTts()...");
     // May pause current activity
@@ -172,8 +176,8 @@ public class TrainActivity extends Activity {
     Log.d(TAG, "onSaveInstanceState()");
   }
 
-  private void initWordLists() {
-    allWords = app.getTupleList();
+  private void initWordLists(String listName) {
+    allWords = app.getTupleList(listName);
     remainingTuples = new ArrayList<Tuple>(allWords);
   }
 

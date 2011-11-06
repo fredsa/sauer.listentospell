@@ -1,5 +1,8 @@
 package sauer.listentospell;
 
+import java.util.ArrayList;
+
+import sauer.listentospell.app.ListenToSpellApplication;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,9 +17,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import sauer.listentospell.app.ListenToSpellApplication;
-
-import java.util.ArrayList;
+import android.widget.TextView;
 
 public class WordListActivity extends Activity {
   private static final String TAG = WordListActivity.class.getName();
@@ -28,16 +29,22 @@ public class WordListActivity extends Activity {
 
   private LinearLayout linearLayout;
 
-  private Button addButton;
+  private String listName;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Log.d(TAG, "onCreate()");
 
-    setContentView(R.layout.word_list);
-    addButton = (Button) findViewById(R.id.add_word_row_button);
+    listName = getIntent().getStringExtra("listName");
+    Log.d(TAG, "getIntent().getStringExtra(\"listName\") = " + listName);
 
+    setContentView(R.layout.word_list);
+
+    TextView wordListName = (TextView) findViewById(R.id.word_list_name);
+    wordListName.setText(listName);
+    
+    
     app = (ListenToSpellApplication) getApplication();
 
     Button saveButton = (Button) findViewById(R.id.word_list_save_button);
@@ -53,15 +60,8 @@ public class WordListActivity extends Activity {
     for (int i = 1; i <= 1; i++) {
       addWordRow(true);
     }
-    addButton.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View arg0) {
-        addWordRow(true);
-      }
-    });
 
-    loadAndShow();
-
+    loadAndShow(listName);
   }
 
   private void addWordRow(boolean requestFocus) {
@@ -160,8 +160,8 @@ public class WordListActivity extends Activity {
     }
   }
 
-  private void loadAndShow() {
-    ArrayList<Tuple> tupleList = app.getTupleList();
+  private void loadAndShow(String listname) {
+    ArrayList<Tuple> tupleList = app.getTupleList(listname);
     if (tupleList.isEmpty()) {
 
       //      tupleList = new ArrayList<Tuple>();
@@ -244,7 +244,7 @@ public class WordListActivity extends Activity {
   protected void onResume() {
     super.onResume();
     Log.d(TAG, "onResume()");
-    loadAndShow();
+    loadAndShow(listName);
   }
 
   @Override
@@ -264,9 +264,9 @@ public class WordListActivity extends Activity {
       }
     }
     Log.d(TAG, "parseAndSave: " + list);
-    app.setTupleList(list);
+    app.setTupleList(listName, list);
 
-    Log.d(TAG, "..........reading back what we saved: " + app.getTupleList());
+    Log.d(TAG, "..........reading back what we saved: " + app.getTupleList(listName));
   }
 
 }
