@@ -11,13 +11,13 @@
         android:layout_height="match_parent" >
 
         <LinearLayout
-            android:id="@+id/word_list_linear_layout"
+            android:id="@+id/container_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <LinearLayout
-                android:id="@+id/linearLayout2"
+                android:id="@+id/heading_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
@@ -34,29 +34,29 @@
                     android:text="TextView"
                     android:textStyle="bold" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/word_list_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lbutton_row_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/word_list_save_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/save_button" >
+                </Button>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <Button
-            android:id="@+id/add_word_row_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_word_row" >
-        </Button>
-
-        <Button
-            android:id="@+id/word_list_save_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:text="@string/save_button" >
-        </Button>
-    </LinearLayout>
 
 </LinearLayout>
