@@ -39,6 +39,7 @@ public class MainActivity extends TabActivity {
     
     ListenToSpellApplication app = (ListenToSpellApplication) getApplication();
 
-    tabHost.setCurrentTab(app.isSetup() ? 0 : 1);
+//    tabHost.setCurrentTab(app.isSetup() ? 0 : 1);
+    tabHost.setCurrentTab(0);
   }
 }
