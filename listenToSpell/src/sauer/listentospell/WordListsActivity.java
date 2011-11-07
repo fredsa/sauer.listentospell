@@ -9,6 +9,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.LightingColorFilter;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -34,7 +35,9 @@ public class WordListsActivity extends Activity {
 
     setContentView(R.layout.word_lists);
     addWordListButton = (Button) findViewById(R.id.add_word_list_button);
-
+    addWordListButton.getBackground().setColorFilter(new LightingColorFilter(0x00000000, 0xFF2554C7));
+//    addWordListButton.setBackgroundColor(0xFF347C17);
+    
     app = (ListenToSpellApplication) getApplication();
 
     linearLayout = (LinearLayout) findViewById(R.id.word_lists_linear_layout);

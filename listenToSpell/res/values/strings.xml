@@ -17,5 +17,5 @@
     <string name="word_lists">Word Lists</string>
     <string name="new_word_list">+ New Spelling List</string>
     <string name="word_list_item_edit_text">Edit</string>
-    <string name="word_list_item_take_test">Test Me</string>
+    <string name="word_list_item_take_test">Take Test</string>
 </resources>
