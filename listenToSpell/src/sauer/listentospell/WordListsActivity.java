@@ -36,7 +36,6 @@ public class WordListsActivity extends Activity {
     setContentView(R.layout.word_lists);
     addWordListButton = (Button) findViewById(R.id.add_word_list_button);
     addWordListButton.getBackground().setColorFilter(new LightingColorFilter(0x00000000, 0xFF2554C7));
-//    addWordListButton.setBackgroundColor(0xFF347C17);
     
     app = (ListenToSpellApplication) getApplication();
 

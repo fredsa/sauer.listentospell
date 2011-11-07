@@ -6,6 +6,7 @@ import sauer.listentospell.app.ListenToSpellApplication;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.LightingColorFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -48,6 +49,7 @@ public class WordListActivity extends Activity {
     app = (ListenToSpellApplication) getApplication();
 
     Button saveButton = (Button) findViewById(R.id.word_list_save_button);
+    saveButton.getBackground().setColorFilter(new LightingColorFilter(0x00000000, 0xFF348017));
     saveButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
