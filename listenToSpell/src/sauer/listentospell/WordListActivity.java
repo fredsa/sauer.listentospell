@@ -32,6 +32,8 @@ public class WordListActivity extends Activity {
 
   private String listName;
 
+  private TextView wordListNameEditView;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -42,8 +44,8 @@ public class WordListActivity extends Activity {
 
     setContentView(R.layout.word_list);
 
-    TextView wordListName = (TextView) findViewById(R.id.word_list_name);
-    wordListName.setText(listName);
+    wordListNameEditView = (TextView) findViewById(R.id.word_list_name);
+    wordListNameEditView.setText(listName);
     
     
     app = (ListenToSpellApplication) getApplication();
@@ -266,6 +268,8 @@ public class WordListActivity extends Activity {
       }
     }
     Log.d(TAG, "parseAndSave: " + list);
+    app.setTupleList(listName, new ArrayList<Tuple>());
+    listName = wordListNameEditView.getText().toString();
     app.setTupleList(listName, list);
 
     Log.d(TAG, "..........reading back what we saved: " + app.getTupleList(listName));

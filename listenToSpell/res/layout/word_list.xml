@@ -27,12 +27,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/word_list_heading" />
 
-                <TextView
+                <EditText
                     android:id="@+id/word_list_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
-                    android:textStyle="bold" />
+                    android:layout_weight="1"
+                    android:textStyle="bold" >
+
+                    <requestFocus />
+                </EditText>
             </LinearLayout>
 
             <LinearLayout
