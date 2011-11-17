@@ -61,12 +61,14 @@ public class WordListsActivity extends Activity {
     alert.setView(listNameEditText);
 
     alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+      @Override
       public void onClick(DialogInterface dialog, int whichButton) {
         edit(listNameEditText.getText().toString());
       }
     });
 
     alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+      @Override
       public void onClick(DialogInterface dialog, int whichButton) {
         // do nothing
       }
