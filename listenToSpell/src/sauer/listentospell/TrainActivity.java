@@ -262,14 +262,13 @@ public class TrainActivity extends Activity {
       return;
     }
 
+    HashMap<String, String> map = new HashMap<String, String>();
     if (utterenceId != null) {
-      HashMap<String, String> map = new HashMap<String, String>();
       map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utterenceId);
-
-      tts.speak(text, queueMode, map);
-    } else {
-      tts.speak(text, queueMode, null);
     }
+    map.put(/* TextToSpeech.Engine.KEY_FEATURE_NETWORK_SYNTHESIS */ "networkTts", Boolean.TRUE.toString());
+
+    tts.speak(text, queueMode, map);
   }
 
   public void onRepeatClick(View view) {
