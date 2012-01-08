@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class TrainActivity extends Activity {
+public class TrainActivity extends ListenToSpellActivity {
 
   private static final Random random = new Random();
   private static final String CLEAR_ANSWER_EDIT_TEXT = "CLEAR_ANSWER_EDIT_TEXT";

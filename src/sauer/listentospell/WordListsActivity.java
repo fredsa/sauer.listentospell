@@ -21,7 +21,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class WordListsActivity extends Activity {
+public class WordListsActivity extends ListenToSpellActivity {
   private static final String TAG = WordListsActivity.class.getName();
 
   private Button addWordListButton;

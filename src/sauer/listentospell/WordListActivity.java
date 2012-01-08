@@ -20,7 +20,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class WordListActivity extends Activity {
+public class WordListActivity extends ListenToSpellActivity {
   private static final String TAG = WordListActivity.class.getName();
 
   private ListenToSpellApplication app;

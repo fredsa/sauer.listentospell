@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 
-public class MyStatsActivity extends Activity {
+public class MyStatsActivity extends ListenToSpellActivity {
   private static final String TAG = MyStatsActivity.class.getName();
 
   @Override
