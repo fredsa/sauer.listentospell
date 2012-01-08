@@ -1,16 +1,12 @@
 package sauer.listentospell;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 import sauer.listentospell.app.ListenToSpellApplication;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.TextToSpeech.OnInitListener;
-import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,13 +19,8 @@ import android.widget.TextView.OnEditorActionListener;
 public class TrainActivity extends SpeechActivity {
 
   private static final Random random = new Random();
-  private static final String CLEAR_ANSWER_EDIT_TEXT = "CLEAR_ANSWER_EDIT_TEXT";
-  private static final int MY_DATA_CHECK_CODE = 42;
   private static final String TAG = TrainActivity.class.getName();
   private EditText answerEditText;
-  private OnInitListener initListener;
-  private TextToSpeech tts;
-  private boolean ttsReady;
   private Tuple tuple;
   private ListenToSpellApplication app;
   private TextView trainTestStatus;
@@ -54,12 +45,6 @@ public class TrainActivity extends SpeechActivity {
   private String partialAnswer;
   private String listName;
 
-  @Override
-  protected void onResume() {
-    super.onResume();
-    setView();
-  }
-
   protected void colorAnswerEditText() {
     String answer = answerEditText.getText().toString();
     int color = Color.BLACK;
@@ -69,30 +54,6 @@ public class TrainActivity extends SpeechActivity {
       color = Color.RED;
     }
     answerEditText.setTextColor(color);
-  }
-
-  private void setView() {
-    if (!ttsReady) {
-      setContentView(R.layout.initializing_tts);
-      return;
-    }
-
-    setContentView(R.layout.train);
-
-    answerEditText = (EditText) findViewById(R.id.answer_textbox);
-    answerEditText.setText(partialAnswer);
-    answerEditText.setOnEditorActionListener(new OnEditorActionListener() {
-      @Override
-      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        Log.d(TAG, "onEditorAction() v=" + v + "; actionId=" + actionId + "; event=" + event);
-        if (event == null || event.getAction() == KeyEvent.ACTION_DOWN) {
-          onDoneClick(v);
-        }
-        return true;
-      }
-    });
-    answerEditText.addTextChangedListener(textWatcher);
-    trainTestStatus = (TextView) findViewById(R.id.train_test_status);
   }
 
   private void nextWord() {
@@ -115,15 +76,13 @@ public class TrainActivity extends SpeechActivity {
     setStatus();
   }
 
+  protected void onTtsReady() {
+    nextWord();
+  }
+
   private void setStatus() {
     trainTestStatus.setText(1 + remainingTuples.size() + "/" + allWords.size() + " words remaining");
     Log.d(TAG, "tuple=" + tuple + "; " + remainingTuples.size() + " tuple(s): " + remainingTuples);
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    tts.shutdown();
   }
 
   @Override
@@ -131,43 +90,31 @@ public class TrainActivity extends SpeechActivity {
     super.onCreate(savedInstanceState);
     Log.d(TAG, "savedInstanceState=" + savedInstanceState);
 
-    listName = getIntent().getStringExtra("listName");
-    Log.d(TAG, "getIntent().getStringExtra(\"listName\") = " + listName);
-
     app = (ListenToSpellApplication) getApplication();
 
-    initListener = new OnInitListener() {
-      @Override
-      public void onInit(int status) {
-        Log.e(TAG, "OnInitListener.onInit(" + status + ")");
-        if (status == TextToSpeech.SUCCESS) {
-          ttsReady = true;
-
-          tts.setOnUtteranceCompletedListener(new OnUtteranceCompletedListener() {
-            @Override
-            public void onUtteranceCompleted(String utteranceId) {
-              Log.d(TAG, "onUtteranceCompleted(" + utteranceId + ")");
-              if (CLEAR_ANSWER_EDIT_TEXT.equals(utteranceId)) {
-                //                answerEditText.setText("");
-              }
-            }
-          });
-
-          setView();
-          nextWord();
-        } else {
-          Log.e(TAG, "OnInitListener.onInit(ERROR = " + status + ")");
-        }
-      }
-    };
+    listName = getIntent().getStringExtra("listName");
+    Log.d(TAG, "getIntent().getStringExtra(\"listName\") = " + listName);
 
     Log.d(TAG, "initWordLists()...");
     initWordLists(listName);
 
-    Log.d(TAG, "checkTts()...");
-    // May pause current activity
-    checkTts();
-  }
+    setContentView(R.layout.train);
+
+    answerEditText = (EditText) findViewById(R.id.answer_textbox);
+    answerEditText.setText(partialAnswer);
+    answerEditText.setOnEditorActionListener(new OnEditorActionListener() {
+      @Override
+      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        Log.d(TAG, "onEditorAction() v=" + v + "; actionId=" + actionId + "; event=" + event);
+        if (event == null || event.getAction() == KeyEvent.ACTION_DOWN) {
+          onDoneClick(v);
+        }
+        return true;
+      }
+    });
+    answerEditText.addTextChangedListener(textWatcher);
+    trainTestStatus = (TextView) findViewById(R.id.train_test_status);
+}
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
@@ -178,33 +125,6 @@ public class TrainActivity extends SpeechActivity {
   private void initWordLists(String listName) {
     allWords = app.getTupleList(listName);
     remainingTuples = new ArrayList<Tuple>(allWords);
-  }
-
-  private void checkTts() {
-    Intent checkIntent = new Intent();
-    checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-    startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
-  }
-
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    switch (requestCode) {
-      case MY_DATA_CHECK_CODE:
-        Log.d(TAG, "onActivityResult() resultCode=" + resultCode + "; data=" + data);
-        if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-          tts = new TextToSpeech(getApplicationContext(), initListener);
-        } else {
-          // missing data, install it
-          Log.e(TAG, "Missing TTS data; resultCode=" + resultCode);
-          Intent installIntent = new Intent();
-          installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-          startActivity(installIntent);
-        }
-        break;
-      default:
-        Log.d(TAG, "onActivityResult() requestCode=" + requestCode);
-    }
   }
 
   public void onDoneClick(View view) {
@@ -221,11 +141,11 @@ public class TrainActivity extends SpeechActivity {
 
   private void thatIsIncorrect(String text) {
     String say = text + "? That's incorrect. Spell: " + tuple.word;
-    sayNow(say, CLEAR_ANSWER_EDIT_TEXT);
+    sayNow(say);
   }
 
   private void thatIsCorrect() {
-    sayNow("That's right", null);
+    sayNow("That's right");
     for (int i = 0; i < tuple.word.length(); i++) {
       String letter = "" + tuple.word.charAt(i);
       Log.d(TAG, "letter=" + letter);
@@ -235,6 +155,7 @@ public class TrainActivity extends SpeechActivity {
     sayNext(" spells " + tuple.word + ".");
     nextWord();
   }
+  
 
   private String pronounce(String letter) {
     if (letter.equals("a")) {
@@ -247,31 +168,8 @@ public class TrainActivity extends SpeechActivity {
     return letter;
   }
 
-  private void sayNext(String text) {
-    say(text, TextToSpeech.QUEUE_ADD, null);
-  }
-
-  private void sayNow(String text, String utterenceId) {
-    say(text, TextToSpeech.QUEUE_FLUSH, utterenceId);
-  }
-
-  private void say(String text, int queueMode, String utterenceId) {
-    Log.d(TAG, "say(" + text + ")");
-    if (!ttsReady) {
-      return;
-    }
-
-    HashMap<String, String> map = new HashMap<String, String>();
-    if (utterenceId != null) {
-      map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utterenceId);
-    }
-    map.put(/* TextToSpeech.Engine.KEY_FEATURE_NETWORK_SYNTHESIS */ "networkTts", Boolean.TRUE.toString());
-
-    tts.speak(text, queueMode, map);
-  }
-
   public void onRepeatClick(View view) {
-    sayNow(tuple.word, null);
+    sayNow(tuple.word);
     sayNext(tuple.sentence);
     sayNext(tuple.word);
   }
