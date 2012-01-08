@@ -1,12 +1,11 @@
 package sauer.listentospell;
 
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 
-public class MyStatsActivity extends ListenToSpellActivity {
+public class MyStatsActivity extends SpeechActivity {
   private static final String TAG = MyStatsActivity.class.getName();
 
   @Override

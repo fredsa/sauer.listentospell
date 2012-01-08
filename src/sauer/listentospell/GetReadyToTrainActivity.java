@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class GetReadyToTrainActivity extends ListenToSpellActivity {
+public class GetReadyToTrainActivity extends SpeechActivity {
 
   private Button startTrainingButton;
   private ListenToSpellApplication app;

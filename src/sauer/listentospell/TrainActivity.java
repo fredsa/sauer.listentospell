@@ -1,7 +1,6 @@
 package sauer.listentospell;
 
 import sauer.listentospell.app.ListenToSpellApplication;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class TrainActivity extends ListenToSpellActivity {
+public class TrainActivity extends SpeechActivity {
 
   private static final Random random = new Random();
   private static final String CLEAR_ANSWER_EDIT_TEXT = "CLEAR_ANSWER_EDIT_TEXT";

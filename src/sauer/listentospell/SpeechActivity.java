@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.media.AudioManager;
 import android.os.Bundle;
 
-public class ListenToSpellActivity extends Activity {
+public class SpeechActivity extends Activity {
 
-  private static final String TAG = ListenToSpellActivity.class.getName();
+  private static final String TAG = SpeechActivity.class.getName();
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
