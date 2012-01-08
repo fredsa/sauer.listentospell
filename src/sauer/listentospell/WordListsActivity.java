@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import sauer.listentospell.app.ListenToSpellApplication;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;

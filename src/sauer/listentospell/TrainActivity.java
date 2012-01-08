@@ -1,5 +1,9 @@
 package sauer.listentospell;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+
 import sauer.listentospell.app.ListenToSpellApplication;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,10 +19,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
 
 public class TrainActivity extends SpeechActivity {
 
