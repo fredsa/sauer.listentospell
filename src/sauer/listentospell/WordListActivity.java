@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -33,6 +34,15 @@ public class WordListActivity extends SpeechActivity {
 
   private TextView wordListNameEditView;
 
+  private OnFocusChangeListener speakOnFocusLostListener = new OnFocusChangeListener() {
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+      if (!hasFocus) {
+        sayNow(((EditText) v).getText().toString());
+      }
+    }
+  };
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -45,8 +55,7 @@ public class WordListActivity extends SpeechActivity {
 
     wordListNameEditView = (TextView) findViewById(R.id.word_list_name);
     wordListNameEditView.setText(listName);
-    
-    
+
     app = (ListenToSpellApplication) getApplication();
 
     Button saveButton = (Button) findViewById(R.id.word_list_save_button);
@@ -122,6 +131,9 @@ public class WordListActivity extends SpeechActivity {
     masterLinearLayout.addView(sentenceEditText);
 
     linearLayout.addView(masterLinearLayout);
+
+    wordEditText.setOnFocusChangeListener(speakOnFocusLostListener);
+    sentenceEditText.setOnFocusChangeListener(speakOnFocusLostListener);
 
     wordEditText.addTextChangedListener(new TextWatcher() {
       @Override
