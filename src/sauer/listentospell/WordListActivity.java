@@ -113,17 +113,6 @@ public class WordListActivity extends SpeechActivity {
     rowOneLinearLayout.addView(wordEditText);
     rowOneLinearLayout.addView(deleteButton);
 
-    //    View separator = new View(this);
-    //    separator.setBackgroundColor(Color.WHITE);
-    //    separator.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, 2));
-
-    //    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-    //        LinearLayout.LayoutParams.FILL_PARENT, 2);
-    //    layoutParams.setMargins(0, 0, 0, 6);
-    //    separator.setLayoutParams(layoutParams);
-
-    //    masterLinearLayout.addView(separator);
-
     masterLinearLayout.setPadding(0, 10, 0, 0);
     masterLinearLayout.setBackgroundColor(Color.rgb(50, 50, 50));
 
