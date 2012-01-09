@@ -149,13 +149,13 @@ public class TrainActivity extends SpeechActivity {
 
   private void thatIsCorrect() {
     sayNow("That's right");
-    for (int i = 0; i < tuple.word.length(); i++) {
-      String letter = "" + tuple.word.charAt(i);
-      Log.d(TAG, "letter=" + letter);
-      String say = pronounce(letter);
-      sayNext(say);
-    }
-    sayNext(" spells " + tuple.word + ".");
+//    for (int i = 0; i < tuple.word.length(); i++) {
+//      String letter = "" + tuple.word.charAt(i);
+//      Log.d(TAG, "letter=" + letter);
+//      String say = pronounce(letter);
+//      sayNext(say);
+//    }
+//    sayNext(" spells " + tuple.word + ".");
     nextWord();
   }
 
