@@ -1,6 +1,7 @@
 package sauer.listentospell;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,7 +13,7 @@ import android.util.Log;
 
 public abstract class SpeechActivity extends Activity {
 
-  private static final String TAG = SpeechActivity.class.getName();
+  private final String TAG = SpeechActivity.class.getName() + ":" + this.getClass().getSimpleName();
   private static final int MY_DATA_CHECK_CODE = 42;
   private OnInitListener initListener;
   private TextToSpeech tts;
@@ -26,17 +27,20 @@ public abstract class SpeechActivity extends Activity {
     initListener = new OnInitListener() {
       @Override
       public void onInit(int status) {
-        Log.i(TAG, "OnInitListener.onInit(" + status + ")");
+        Log.i(TAG, "TextToSpeech.OnInitListener.onInit(" + status + ")");
+        Locale locale = tts.getLanguage();
+        Log.e(TAG, "locale=" + locale);
+        Log.e(TAG, "tts.isLanguageAvailable(Locale.US)=" + tts.isLanguageAvailable(Locale.US));
         if (status == TextToSpeech.SUCCESS) {
+          Log.i(TAG, "tts=" + tts);
           ttsReady = true;
           onTtsReady();
         } else {
-          Log.e(TAG, "OnInitListener.onInit(ERROR = " + status + ")");
+          Log.e(TAG, "TextToSpeech.OnInitListener.onInit(ERROR = " + status + ")");
         }
       }
     };
 
-    Log.d(TAG, "checkTts()...");
     // May pause current activity
     checkTts();
   }
@@ -45,9 +49,11 @@ public abstract class SpeechActivity extends Activity {
   }
 
   private void checkTts() {
+    Log.d(TAG, "checkTts()...");
     Intent checkIntent = new Intent();
     checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
     startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
+    Log.d(TAG, "...checkTts()");
   }
 
   @Override
@@ -61,6 +67,7 @@ public abstract class SpeechActivity extends Activity {
         } else {
           // missing data, install it
           Log.e(TAG, "Missing TTS data; resultCode=" + resultCode);
+
           Intent installIntent = new Intent();
           installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
           startActivity(installIntent);
@@ -71,11 +78,11 @@ public abstract class SpeechActivity extends Activity {
     }
   }
 
-
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    tts.shutdown();
+    // TODO uncomment and workaround bug
+    // tts.shutdown();
   }
 
   protected void sayNext(String text) {
@@ -101,6 +108,5 @@ public abstract class SpeechActivity extends Activity {
 
     tts.speak(text, queueMode, map);
   }
-
 
 }
