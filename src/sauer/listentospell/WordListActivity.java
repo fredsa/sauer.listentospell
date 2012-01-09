@@ -100,6 +100,8 @@ public class WordListActivity extends SpeechActivity {
     wordEditText.setOnFocusChangeListener(speakOnFocusLostListener);
     sentenceEditText.setOnFocusChangeListener(speakOnFocusLostListener);
 
+    wordEditText.addTextChangedListener(new EnforceSingleWordTextWatcher());
+
     wordEditText.addTextChangedListener(new TextWatcher() {
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {

@@ -1,5 +1,9 @@
 package sauer.listentospell.app;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
+import sauer.listentospell.Tuple;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,10 +11,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
-import sauer.listentospell.Tuple;
-
-import java.util.ArrayList;
-import java.util.HashSet;
 
 public class ListenToSpellApplication extends Application {
   private static final String WORDLIST = "wordlist";

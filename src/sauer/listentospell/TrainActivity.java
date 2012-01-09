@@ -29,19 +29,20 @@ public class TrainActivity extends SpeechActivity {
 
   private TextWatcher textWatcher = new TextWatcher() {
     @Override
-    public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-      partialAnswer = arg0.toString();
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+      partialAnswer = s.toString();
     }
 
     @Override
-    public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
     }
 
     @Override
-    public void afterTextChanged(Editable arg0) {
+    public void afterTextChanged(Editable s) {
       colorAnswerEditText();
     }
   };
+
   private String partialAnswer;
   private String listName;
 
@@ -113,8 +114,10 @@ public class TrainActivity extends SpeechActivity {
       }
     });
     answerEditText.addTextChangedListener(textWatcher);
+    answerEditText.addTextChangedListener(new EnforceSingleWordTextWatcher());
+
     trainTestStatus = (TextView) findViewById(R.id.train_test_status);
-}
+  }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
@@ -155,7 +158,6 @@ public class TrainActivity extends SpeechActivity {
     sayNext(" spells " + tuple.word + ".");
     nextWord();
   }
-  
 
   private String pronounce(String letter) {
     if (letter.equals("a")) {
