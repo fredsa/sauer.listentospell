@@ -128,15 +128,16 @@ public class WordListActivity extends SpeechActivity {
     }
   }
 
-  private void updateHints(final EditText wordEditText, final EditText descriptionEditText,
+  private void updateHints(final EditText wordEditText, final EditText sentenceEditText,
       int number) {
     String word = wordEditText.getText().toString();
+    sentenceEditText.setEnabled(word.length() > 0);
     if (word.length() > 0) {
-      descriptionEditText.setHint("Enter a brief sentence using '" + word + "' (optional)");
+      sentenceEditText.setHint("Enter a brief sentence using '" + word + "' (optional)");
     } else {
       String w = "word #" + (number + 1);
       wordEditText.setHint(w);
-      descriptionEditText.setHint("Enter a brief sentence using " + w + " (optional)");
+      sentenceEditText.setHint("Enter a brief sentence using " + w + " (optional)");
     }
   }
 
