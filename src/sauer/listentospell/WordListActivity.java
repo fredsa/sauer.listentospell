@@ -4,12 +4,9 @@ import java.util.ArrayList;
 
 import sauer.listentospell.app.ListenToSpellApplication;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.LightingColorFilter;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -77,28 +74,18 @@ public class WordListActivity extends SpeechActivity {
   }
 
   private void addWordRow(boolean requestFocus) {
+    View wordSentenceItem = View.inflate(this, R.layout.word_sentence_item, null);
+    linearLayout.addView(wordSentenceItem);
+
     final int index = wordEditTextList.size();
 
-    final LinearLayout masterLinearLayout = new LinearLayout(this);
-    masterLinearLayout.setOrientation(LinearLayout.VERTICAL);
-
-    final LinearLayout rowOneLinearLayout = new LinearLayout(this);
-    rowOneLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-    final EditText wordEditText = new EditText(this);
+    final EditText wordEditText = (EditText) wordSentenceItem.findViewById(R.id.word_edit_text);
     wordEditTextList.add(wordEditText);
 
-    final EditText sentenceEditText = new EditText(this);
+    final EditText sentenceEditText = (EditText) wordSentenceItem.findViewById(R.id.sentence_edit_text);
     sentenceEditTextList.add(sentenceEditText);
 
-    wordEditText.setSingleLine();
-    wordEditText.setWidth(300);
-    wordEditText.setTypeface(Typeface.DEFAULT_BOLD);
-
-    sentenceEditText.setSingleLine();
-
-    Button deleteButton = new Button(this);
-    deleteButton.setText("delete");
+    Button deleteButton = (Button) wordSentenceItem.findViewById(R.id.delete_button);
     deleteButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -109,17 +96,6 @@ public class WordListActivity extends SpeechActivity {
         }
       }
     });
-
-    rowOneLinearLayout.addView(wordEditText);
-    rowOneLinearLayout.addView(deleteButton);
-
-    masterLinearLayout.setPadding(0, 10, 0, 0);
-    masterLinearLayout.setBackgroundColor(Color.rgb(50, 50, 50));
-
-    masterLinearLayout.addView(rowOneLinearLayout);
-    masterLinearLayout.addView(sentenceEditText);
-
-    linearLayout.addView(masterLinearLayout);
 
     wordEditText.setOnFocusChangeListener(speakOnFocusLostListener);
     sentenceEditText.setOnFocusChangeListener(speakOnFocusLostListener);
@@ -143,12 +119,10 @@ public class WordListActivity extends SpeechActivity {
       }
     });
 
-    sentenceEditText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-        | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
     updateHints(wordEditText, sentenceEditText, index);
 
     if (requestFocus) {
-      //      wordEditText.requestFocus();
+      wordEditText.requestFocus();
     }
   }
 
@@ -208,7 +182,7 @@ public class WordListActivity extends SpeechActivity {
     Log.d(TAG, "wordEditTextList.size() = " + wordEditTextList.size());
     Log.d(TAG, "wordList.size() = " + tupleList.size());
     while (wordEditTextList.size() < tupleList.size()) {
-      addWordRow(true);
+      addWordRow(false);
     }
     int i = 0;
     for (Tuple tuple : tupleList) {
