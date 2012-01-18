@@ -19,4 +19,8 @@
     <string name="word_list_item_edit_text">Edit</string>
     <string name="word_list_item_take_test">Take Test</string>
     <string name="delete_button">delete</string>
+    <string name="spell_correct_words">Spell correct words</string>
+    <string name="color_code_words">Color code words</string>
+    <string name="color_code_words_checkbox_description">(Parital) words spelled correctly are green. Incorrect words are red.</string>
+    <string name="spell_correct_words_checkbox_description">Words are spelled (spoken) after entered correctly, to reinforce correct spelling.</string>
 </resources>

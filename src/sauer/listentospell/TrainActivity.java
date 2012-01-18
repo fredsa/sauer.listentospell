@@ -49,10 +49,12 @@ public class TrainActivity extends SpeechActivity {
   protected void colorAnswerEditText() {
     String answer = answerEditText.getText().toString();
     int color = Color.BLACK;
-    if (tuple.word.equals(answer)) {
-      color = Color.GREEN;
-    } else if (!tuple.word.startsWith(answer)) {
-      color = Color.RED;
+    if (app.getColorCodeWords()) {
+      if (tuple.word.equals(answer)) {
+        color = Color.GREEN;
+      } else if (!tuple.word.startsWith(answer)) {
+        color = Color.RED;
+      }
     }
     answerEditText.setTextColor(color);
   }
@@ -149,13 +151,15 @@ public class TrainActivity extends SpeechActivity {
 
   private void thatIsCorrect() {
     sayNow("That's right");
-//    for (int i = 0; i < tuple.word.length(); i++) {
-//      String letter = "" + tuple.word.charAt(i);
-//      Log.d(TAG, "letter=" + letter);
-//      String say = pronounce(letter);
-//      sayNext(say);
-//    }
-//    sayNext(" spells " + tuple.word + ".");
+    if (app.getSpellCorrectWords()) {
+      for (int i = 0; i < tuple.word.length(); i++) {
+        String letter = "" + tuple.word.charAt(i);
+        Log.d(TAG, "letter=" + letter);
+        String say = pronounce(letter);
+        sayNext(say);
+      }
+      sayNext(" spells " + tuple.word + ".");
+    }
     nextWord();
   }
 

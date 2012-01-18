@@ -31,9 +31,14 @@ public class MainActivity extends TabActivity {
     spec = tabHost.newTabSpec("entry").setIndicator("Word Lists").setContent(intent);
     tabHost.addTab(spec);
 
+    // Settings
+    intent = new Intent().setClass(this, SettingsActivity.class);
+    spec = tabHost.newTabSpec("entry2").setIndicator("Settings").setContent(intent);
+    tabHost.addTab(spec);
+
     // My Stats
     intent = new Intent().setClass(this, MyStatsActivity.class);
-    spec = tabHost.newTabSpec("entry2").setIndicator("My Stats").setContent(intent);
+    spec = tabHost.newTabSpec("entry3").setIndicator("My Stats").setContent(intent);
     tabHost.addTab(spec);
 
     //    ListenToSpellApplication app = (ListenToSpellApplication) getApplication();
