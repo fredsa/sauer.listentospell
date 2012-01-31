@@ -8,7 +8,11 @@ import android.text.TextWatcher;
 
 public class EnforceSingleWordTextWatcher implements TextWatcher {
 
-  private Pattern pattern = Pattern.compile(".*(\\W+).*");
+  /**
+   * Pattern to match any disallowed characters. Allowed are word
+   * characters, hyphens ({@literal -}) and apostrophes ({@literal '}).
+   */
+  private Pattern pattern = Pattern.compile(".*([^-'\\w]+).*");
 
   public EnforceSingleWordTextWatcher() {
   }
