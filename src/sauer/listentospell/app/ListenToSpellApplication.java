@@ -63,8 +63,8 @@ public class ListenToSpellApplication extends Application {
 
   public ArrayList<String> getListNames() {
     ArrayList<String> list = new ArrayList<String>();
-    Cursor query = sql.query(WORDLIST, new String[] {"listname"}, null, null, "listname", null,
-        null);
+    Cursor query = sql.query(WORDLIST, new String[] {"listname"}, null, null, null, null,
+        "listname DESC");
     while (query.moveToNext()) {
       String listName = query.getString(0);
       list.add(listName);
