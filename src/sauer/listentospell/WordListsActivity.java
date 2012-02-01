@@ -1,5 +1,6 @@
 package sauer.listentospell;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -10,7 +11,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.LightingColorFilter;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class WordListsActivity extends SpeechActivity {
+  private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd");
+
   private static final String TAG = WordListsActivity.class.getName();
 
   private Button addWordListButton;
@@ -34,8 +36,9 @@ public class WordListsActivity extends SpeechActivity {
 
     setContentView(R.layout.word_lists);
     addWordListButton = (Button) findViewById(R.id.add_word_list_button);
-    addWordListButton.getBackground().setColorFilter(new LightingColorFilter(0x00000000, 0xFF2554C7));
-    
+    addWordListButton.getBackground().setColorFilter(
+        new LightingColorFilter(0x00000000, 0xFF2554C7));
+
     app = (ListenToSpellApplication) getApplication();
 
     linearLayout = (LinearLayout) findViewById(R.id.word_lists_linear_layout);
@@ -56,7 +59,7 @@ public class WordListsActivity extends SpeechActivity {
 
     // Set an EditText view to get user input 
     final EditText listNameEditText = new EditText(this);
-    listNameEditText.setText("Word list " + DateFormat.getDateFormat(this).format(new Date()));
+    listNameEditText.setText("Word list " + DATE_FORMAT.format(new Date()));
     alert.setView(listNameEditText);
 
     alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -171,7 +174,7 @@ public class WordListsActivity extends SpeechActivity {
     Log.d(TAG, "onStart()");
 
     loadAndShow();
- }
+  }
 
   @Override
   protected void onStop() {
