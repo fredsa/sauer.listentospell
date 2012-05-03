@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
@@ -62,19 +65,32 @@ public abstract class SpeechActivity extends Activity {
     switch (requestCode) {
       case MY_DATA_CHECK_CODE:
         Log.d(TAG, "onActivityResult() resultCode=" + resultCode + "; data=" + data);
-        if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-          tts = new TextToSpeech(getApplicationContext(), initListener);
-        } else {
-          // missing data, install it
-          Log.e(TAG, "Missing TTS data; resultCode=" + resultCode);
+        switch (resultCode) {
+          case TextToSpeech.Engine.CHECK_VOICE_DATA_PASS:
+            Log.e(TAG, "Cool, ACTION_CHECK_TTS_DATA -> resultCode=CHECK_VOICE_DATA_PASS");
+            tts = new TextToSpeech(getApplicationContext(), initListener);
+            break;
+          case TextToSpeech.Engine.CHECK_VOICE_DATA_MISSING_DATA:
+            // missing data, install it
+            Log.e(TAG, "Oh no, ACTION_CHECK_TTS_DATA -> resultCode=CHECK_VOICE_DATA_MISSING_DATA");
 
-          Intent installIntent = new Intent();
-          installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-          startActivity(installIntent);
+            Intent installIntent = new Intent();
+            installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+            startActivity(installIntent);
+            break;
+          default:
+            Log.e(TAG, "Oh no, ACTION_CHECK_TTS_DATA -> resultCode=" + resultCode);
+        }
+        if (tts == null) {
+          Log.d(
+              TAG,
+              "Going to try 'tts = new TextToSpeech(getApplicationContext(), initListener)' even though ACTION_CHECK_TTS_DATA -> resultCode="
+                  + resultCode);
+          tts = new TextToSpeech(getApplicationContext(), initListener);
         }
         break;
       default:
-        Log.d(TAG, "onActivityResult() requestCode=" + requestCode);
+        Log.d(TAG, "Unhandled: onActivityResult() requestCode=" + requestCode);
     }
   }
 
@@ -93,9 +109,16 @@ public abstract class SpeechActivity extends Activity {
     say(text, TextToSpeech.QUEUE_FLUSH, null);
   }
 
+  private boolean isNetworkAvailable() {
+    ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+    return activeNetworkInfo != null;
+  }
+
   private void say(String text, int queueMode, String utterenceId) {
     Log.d(TAG, "say(" + text + ")");
     if (!ttsReady) {
+      Log.d(TAG, "!ttsReady :(");
       return;
     }
 
@@ -103,10 +126,13 @@ public abstract class SpeechActivity extends Activity {
     if (utterenceId != null) {
       map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utterenceId);
     }
-    map.put(/* TextToSpeech.Engine.KEY_FEATURE_NETWORK_SYNTHESIS */"networkTts",
-        Boolean.TRUE.toString());
+    if (isNetworkAvailable()) {
+      map.put(/* TextToSpeech.Engine.KEY_FEATURE_NETWORK_SYNTHESIS */"networkTts",
+          Boolean.TRUE.toString());
+    }
 
-    tts.speak(text, queueMode, map);
+    int speak = tts.speak(text, queueMode, map);
+    Log.d(TAG, "tts.speak(text, queueMode, map) -> " + speak);
   }
 
 }
