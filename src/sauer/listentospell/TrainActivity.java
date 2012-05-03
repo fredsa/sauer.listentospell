@@ -50,6 +50,8 @@ public class TrainActivity extends SpeechActivity {
     String answer = answerEditText.getText().toString();
     int color = Color.BLACK;
     if (app.getColorCodeWords()) {
+      assert tuple != null;
+      assert tuple.word != null;
       if (tuple.word.equals(answer)) {
         color = Color.GREEN;
       } else if (!tuple.word.startsWith(answer)) {
