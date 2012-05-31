@@ -5,7 +5,6 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,7 +16,6 @@ import android.util.Log;
 public abstract class SpeechActivity extends Activity {
 
   private final String TAG = SpeechActivity.class.getName() + ":" + this.getClass().getSimpleName();
-  private static final int MY_DATA_CHECK_CODE = 42;
   private OnInitListener initListener;
   private TextToSpeech tts;
   private boolean ttsReady;
@@ -44,54 +42,10 @@ public abstract class SpeechActivity extends Activity {
       }
     };
 
-    // May pause current activity
-    checkTts();
+    tts = new TextToSpeech(getApplicationContext(), initListener);
   }
 
   protected void onTtsReady() {
-  }
-
-  private void checkTts() {
-    Log.d(TAG, "checkTts()...");
-    Intent checkIntent = new Intent();
-    checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-    startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
-    Log.d(TAG, "...checkTts()");
-  }
-
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    switch (requestCode) {
-      case MY_DATA_CHECK_CODE:
-        Log.d(TAG, "onActivityResult() resultCode=" + resultCode + "; data=" + data);
-        switch (resultCode) {
-          case TextToSpeech.Engine.CHECK_VOICE_DATA_PASS:
-            Log.e(TAG, "Cool, ACTION_CHECK_TTS_DATA -> resultCode=CHECK_VOICE_DATA_PASS");
-            tts = new TextToSpeech(getApplicationContext(), initListener);
-            break;
-          case TextToSpeech.Engine.CHECK_VOICE_DATA_MISSING_DATA:
-            // missing data, install it
-            Log.e(TAG, "Oh no, ACTION_CHECK_TTS_DATA -> resultCode=CHECK_VOICE_DATA_MISSING_DATA");
-
-            Intent installIntent = new Intent();
-            installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-            startActivity(installIntent);
-            break;
-          default:
-            Log.e(TAG, "Oh no, ACTION_CHECK_TTS_DATA -> resultCode=" + resultCode);
-        }
-        if (tts == null) {
-          Log.d(
-              TAG,
-              "Going to try 'tts = new TextToSpeech(getApplicationContext(), initListener)' even though ACTION_CHECK_TTS_DATA -> resultCode="
-                  + resultCode);
-          tts = new TextToSpeech(getApplicationContext(), initListener);
-        }
-        break;
-      default:
-        Log.d(TAG, "Unhandled: onActivityResult() requestCode=" + requestCode);
-    }
   }
 
   @Override
