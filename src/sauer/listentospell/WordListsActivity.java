@@ -3,6 +3,7 @@ package sauer.listentospell;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import sauer.listentospell.app.ListenToSpellApplication;
 import android.app.AlertDialog;
@@ -21,7 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class WordListsActivity extends SpeechActivity {
-  private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd");
+  private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd", Locale.US);
 
   private static final String TAG = WordListsActivity.class.getName();
 
