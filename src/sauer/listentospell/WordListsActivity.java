@@ -47,15 +47,19 @@ public class WordListsActivity extends SpeechActivity {
       public void onClick(View arg0) {
         addWordListPrompt();
       }
-
     });
+  }
+
+  protected void onTtsReady() {
+    sayNext(getString(R.string.hello));
   }
 
   private void addWordListPrompt() {
     AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
     alert.setTitle("Create a new spelling list");
-    alert.setMessage("Enter the name of your new list");
+    alert.setMessage(R.string.prompt_new_list_name);
+    sayNow(getString(R.string.prompt_new_list_name));
 
     // Set an EditText view to get user input 
     final EditText listNameEditText = new EditText(this);
