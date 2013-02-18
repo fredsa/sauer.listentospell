@@ -21,7 +21,7 @@
     <string name="delete_button">delete</string>
     <string name="spell_correct_words">Reinforce correct spelling</string>
     <string name="color_code_words">Immediate feedback</string>
-    <string name="color_code_words_checkbox_description">(Parital) words spelled correctly are green. Incorrect words are red.</string>
-    <string name="spell_correct_words_checkbox_description">Words are spelled (spoken) after entered correctly, to reinforce correct spelling.</string>
+    <string name="color_code_words_checkbox_description">Words are color coded as you type.</string>
+    <string name="spell_correct_words_checkbox_description">Words are spelled (spoken) after entered correctly.</string>
     <string name="prompt_new_list_name">Enter a name for your new spelling list</string>
 </resources>
