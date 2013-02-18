@@ -13,7 +13,7 @@
 
     <application
         android:name=".app.ListenToSpellApplication"
-        android:icon="@drawable/icon"
+        android:icon="@drawable/ic_launcher"
         android:allowBackup="true"
         android:label="@string/app_name" >
         <activity
