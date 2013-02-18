@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello there. Welcome to Super Star Speller!</string>
+    <string name="hello">Welcome to Super Star Speller!</string>
     <string name="app_name">Super Star Speller</string>
     <string name="repeat_word_button">Repeat word</string>
     <string name="submit_button">Done</string>

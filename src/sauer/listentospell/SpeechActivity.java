@@ -19,6 +19,7 @@ public abstract class SpeechActivity extends Activity {
   private OnInitListener initListener;
   private TextToSpeech tts;
   private boolean ttsReady;
+  private static boolean saidHello;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,10 @@ public abstract class SpeechActivity extends Activity {
         if (status == TextToSpeech.SUCCESS) {
           Log.i(TAG, "tts=" + tts);
           ttsReady = true;
+          if (!saidHello) {
+            sayNow(getString(R.string.hello));
+            saidHello = true;
+          }
           onTtsReady();
         } else {
           Log.e(TAG, "TextToSpeech.OnInitListener.onInit(ERROR = " + status + ")");

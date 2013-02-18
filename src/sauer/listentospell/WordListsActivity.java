@@ -51,10 +51,6 @@ public class WordListsActivity extends SpeechActivity {
     });
   }
 
-  protected void onTtsReady() {
-    sayNext(getString(R.string.hello));
-  }
-
   private void addWordListPrompt() {
     AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
