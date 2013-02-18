@@ -10,6 +10,7 @@ public class MainActivity extends TabActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
     setContentView(R.layout.main_tab_layout);
 
     TabHost tabHost = getTabHost();
@@ -36,10 +37,10 @@ public class MainActivity extends TabActivity {
     spec = tabHost.newTabSpec("entry2").setIndicator("Settings").setContent(intent);
     tabHost.addTab(spec);
 
-    // My Stats
-    intent = new Intent().setClass(this, MyStatsActivity.class);
-    spec = tabHost.newTabSpec("entry3").setIndicator("My Stats").setContent(intent);
-    tabHost.addTab(spec);
+    //    // My Stats
+    //    intent = new Intent().setClass(this, MyStatsActivity.class);
+    //    spec = tabHost.newTabSpec("entry3").setIndicator("My Stats").setContent(intent);
+    //    tabHost.addTab(spec);
 
     //    ListenToSpellApplication app = (ListenToSpellApplication) getApplication();
     //    tabHost.setCurrentTab(app.isSetup() ? 0 : 1);

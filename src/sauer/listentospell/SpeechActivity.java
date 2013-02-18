@@ -26,6 +26,9 @@ public abstract class SpeechActivity extends Activity {
     super.onCreate(savedInstanceState);
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
+    // TODO: set theme declaratively instead
+    setTheme(android.R.style.Theme_Light_NoTitleBar);
+
     initListener = new OnInitListener() {
       @Override
       public void onInit(int status) {
