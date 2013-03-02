@@ -2,6 +2,7 @@ package sauer.listentospell;
 
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.TabHost;
 
@@ -46,4 +47,5 @@ public class MainActivity extends TabActivity {
     //    tabHost.setCurrentTab(app.isSetup() ? 0 : 1);
     tabHost.setCurrentTab(0);
   }
+
 }

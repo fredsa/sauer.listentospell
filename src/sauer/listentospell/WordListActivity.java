@@ -35,7 +35,7 @@ public class WordListActivity extends SpeechActivity {
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
       if (!hasFocus) {
-        sayNow(((EditText) v).getText().toString());
+        sayNow(((EditText) v).getText().toString(), null);
       }
     }
   };

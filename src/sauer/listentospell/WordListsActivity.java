@@ -56,7 +56,7 @@ public class WordListsActivity extends SpeechActivity {
 
     alert.setTitle("Create a new spelling list");
     alert.setMessage(R.string.prompt_new_list_name);
-    sayNow(getString(R.string.prompt_new_list_name));
+    sayNow(getString(R.string.prompt_new_list_name), null);
 
     // Set an EditText view to get user input 
     final EditText listNameEditText = new EditText(this);

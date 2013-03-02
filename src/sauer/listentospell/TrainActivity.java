@@ -18,6 +18,9 @@ import android.widget.TextView.OnEditorActionListener;
 
 public class TrainActivity extends SpeechActivity {
 
+  private static final String UTTERANCE_CORRECT = "CORRECT";
+  private static final String UTTERANCE_INCORRECT = "INCORRECT";
+
   private static final Random random = new Random();
   private static final String TAG = TrainActivity.class.getName();
   private EditText answerEditText;
@@ -148,11 +151,11 @@ public class TrainActivity extends SpeechActivity {
 
   private void thatIsIncorrect(String text) {
     String say = text + "? That's incorrect. Spell: " + tuple.word;
-    sayNow(say);
+    sayNow(say, UTTERANCE_INCORRECT);
   }
 
   private void thatIsCorrect() {
-    sayNow("That's right");
+    sayNow("That's right", UTTERANCE_CORRECT);
     if (app.getSpellCorrectWords()) {
       for (int i = 0; i < tuple.word.length(); i++) {
         String letter = "" + tuple.word.charAt(i);
@@ -177,7 +180,7 @@ public class TrainActivity extends SpeechActivity {
   }
 
   public void onRepeatClick(View view) {
-    sayNow(tuple.word);
+    sayNow(tuple.word, null);
     sayNext(tuple.sentence);
     sayNext(tuple.word);
   }

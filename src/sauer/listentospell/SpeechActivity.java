@@ -11,18 +11,18 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.util.Log;
 
-public abstract class SpeechActivity extends Activity {
+public abstract class SpeechActivity extends Activity implements OnUtteranceCompletedListener {
 
   private final String TAG = SpeechActivity.class.getName() + ":" + this.getClass().getSimpleName();
   private OnInitListener initListener;
   private TextToSpeech tts;
   private boolean ttsReady;
-  private static boolean saidHello;
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
+  protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
@@ -39,10 +39,6 @@ public abstract class SpeechActivity extends Activity {
         if (status == TextToSpeech.SUCCESS) {
           Log.i(TAG, "tts=" + tts);
           ttsReady = true;
-          if (!saidHello) {
-            sayNow(getString(R.string.hello));
-            saidHello = true;
-          }
           onTtsReady();
         } else {
           Log.e(TAG, "TextToSpeech.OnInitListener.onInit(ERROR = " + status + ")");
@@ -51,6 +47,11 @@ public abstract class SpeechActivity extends Activity {
     };
 
     tts = new TextToSpeech(getApplicationContext(), initListener);
+    tts.setOnUtteranceCompletedListener(this);
+  }
+
+  @Override
+  public void onUtteranceCompleted(String utteranceId) {
   }
 
   protected void onTtsReady() {
@@ -67,8 +68,8 @@ public abstract class SpeechActivity extends Activity {
     say(text, TextToSpeech.QUEUE_ADD, null);
   }
 
-  protected void sayNow(String text) {
-    say(text, TextToSpeech.QUEUE_FLUSH, null);
+  protected void sayNow(String text, String utteranceId) {
+    say(text, TextToSpeech.QUEUE_FLUSH, utteranceId);
   }
 
   private boolean isNetworkAvailable() {
@@ -77,7 +78,7 @@ public abstract class SpeechActivity extends Activity {
     return activeNetworkInfo != null;
   }
 
-  private void say(String text, int queueMode, String utterenceId) {
+  protected void say(String text, int queueMode, String utterenceId) {
     Log.d(TAG, "say(" + text + ")");
     if (!ttsReady) {
       Log.d(TAG, "!ttsReady :(");

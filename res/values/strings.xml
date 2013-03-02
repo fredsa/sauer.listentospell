@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="hello">Welcome to Super Star Speller!</string>
     <string name="app_name">Super Star Speller</string>
+    <string name="splash_app_name">Super\nStar\nSpeller</string>
     <string name="repeat_word_button">Repeat word</string>
     <string name="submit_button">Done</string>
     <string name="word_list_heading">Word List:</string>
@@ -24,4 +26,6 @@
     <string name="color_code_words_checkbox_description">Words are color coded as you type.</string>
     <string name="spell_correct_words_checkbox_description">Words are spelled (spoken) after entered correctly.</string>
     <string name="prompt_new_list_name">Enter a name for your new spelling list</string>
+    <string name="action_settings">Settings</string>
+
 </resources>
