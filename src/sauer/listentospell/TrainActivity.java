@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import sauer.listentospell.app.ListenToSpellApplication;
+import sauer.listentospell.app.NextTask;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,9 +18,6 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 public class TrainActivity extends SpeechActivity {
-
-  private static final String UTTERANCE_CORRECT = "CORRECT";
-  private static final String UTTERANCE_INCORRECT = "INCORRECT";
 
   private static final Random random = new Random();
   private static final String TAG = TrainActivity.class.getName();
@@ -67,30 +65,31 @@ public class TrainActivity extends SpeechActivity {
   private void nextWord() {
     int cnt = remainingTuples.size();
     if (cnt == 0) {
-      sayNext("Great job!");
-      Intent intent = new Intent().setClass(this, MainActivity.class);
-      startActivity(intent);
+      app.getSpeaker().say("Great job!", new NextTask() {
+        @Override
+        protected void onPostExecute(Void result) {
+          Intent intent = new Intent().setClass(app, MainActivity.class);
+          startActivity(intent);
+        }
+      });
       return;
     }
     boolean firstWord = remainingTuples.size() == allWords.size();
     tuple = remainingTuples.remove(random.nextInt(cnt));
     String say = firstWord ? "Spell" : "Now spell";
     say += ": " + tuple.word;
-    sayNext(say);
+    app.getSpeaker().say(say);
     if (tuple.sentence.length() > 0) {
-      sayNext(tuple.sentence);
-      sayNext(tuple.word);
+      app.getSpeaker().say(tuple.sentence);
+      app.getSpeaker().say(tuple.word);
     }
     setStatus();
   }
 
-  protected void onTtsReady() {
-    nextWord();
-  }
-
   private void setStatus() {
-    trainTestStatus.setText(1 + remainingTuples.size() + "/" + allWords.size() + " words remaining");
-    Log.d(TAG, "tuple=" + tuple + "; " + remainingTuples.size() + " tuple(s): " + remainingTuples);
+    String status = getString(R.string.train_test_status, 1 + remainingTuples.size(),
+        allWords.size());
+    trainTestStatus.setText(status);
   }
 
   @Override
@@ -101,7 +100,6 @@ public class TrainActivity extends SpeechActivity {
     app = (ListenToSpellApplication) getApplication();
 
     listName = getIntent().getStringExtra("listName");
-    Log.d(TAG, "getIntent().getStringExtra(\"listName\") = " + listName);
 
     Log.d(TAG, "initWordLists()...");
     initWordLists(listName);
@@ -113,7 +111,7 @@ public class TrainActivity extends SpeechActivity {
     answerEditText.setOnEditorActionListener(new OnEditorActionListener() {
       @Override
       public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        Log.d(TAG, "onEditorAction() v=" + v + "; actionId=" + actionId + "; event=" + event);
+        // Log.d(TAG, "onEditorAction() v=" + v + "; actionId=" + actionId + "; event=" + event);
         if (event == null || event.getAction() == KeyEvent.ACTION_DOWN) {
           onDoneClick(v);
         }
@@ -124,6 +122,7 @@ public class TrainActivity extends SpeechActivity {
     answerEditText.addTextChangedListener(new EnforceSingleWordTextWatcher());
 
     trainTestStatus = (TextView) findViewById(R.id.train_test_status);
+    nextWord();
   }
 
   @Override
@@ -138,50 +137,52 @@ public class TrainActivity extends SpeechActivity {
   }
 
   public void onDoneClick(View view) {
-    Log.d(TAG, "onDoneClick()");
     String text = answerEditText.getText().toString();
-    Log.d(TAG, "tuple=" + tuple + "; answered=" + answerEditText.getText().toString());
     if (tuple.word.equals(text)) {
       thatIsCorrect();
     } else {
       thatIsIncorrect(text);
     }
-    answerEditText.setText("");
   }
 
   private void thatIsIncorrect(String text) {
-    String say = text + "? That's incorrect. Spell: " + tuple.word;
-    sayNow(say, UTTERANCE_INCORRECT);
+
+    app.getSpeaker().say(text + "? That's incorrect.", new NextTask() {
+      @Override
+      protected void onPostExecute(Void result) {
+        super.onPostExecute(result);
+        answerEditText.setText("");
+      }
+    });
+    app.getSpeaker().say("Spell: " + tuple.word);
   }
 
   private void thatIsCorrect() {
-    sayNow("That's right", UTTERANCE_CORRECT);
-    if (app.getSpellCorrectWords()) {
-      for (int i = 0; i < tuple.word.length(); i++) {
-        String letter = "" + tuple.word.charAt(i);
-        Log.d(TAG, "letter=" + letter);
-        String say = pronounce(letter);
-        sayNext(say);
+    app.getSpeaker().say("That's right");
+    if (!app.getSpellCorrectWords()) {
+      answerEditText.setText("");
+      nextWord();
+      return;
+    }
+    for (int i = 0; i < tuple.word.length(); i++) {
+      String letter = "" + tuple.word.charAt(i);
+      app.getSpeaker().say(letter);
+    }
+    app.getSpeaker().say(" spells " + tuple.word + ".", new NextTask() {
+      @Override
+      protected void onPostExecute(Void result) {
+        super.onPostExecute(result);
+        answerEditText.setText("");
+        nextWord();
       }
-      sayNext(" spells " + tuple.word + ".");
-    }
-    nextWord();
-  }
-
-  private String pronounce(String letter) {
-    if (letter.equals("a")) {
-      letter = "eh";
-    } else if (letter.equals(" ")) {
-      letter = "space";
-    } else if (letter.equals("'")) {
-      letter = "apostrophe";
-    }
-    return letter;
+    });
   }
 
   public void onRepeatClick(View view) {
-    sayNow(tuple.word, null);
-    sayNext(tuple.sentence);
-    sayNext(tuple.word);
+    app.getSpeaker().sayNow(tuple.word);
+    if (tuple.sentence.length() > 0) {
+      app.getSpeaker().say(tuple.sentence);
+      app.getSpeaker().say(tuple.word);
+    }
   }
 }

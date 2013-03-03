@@ -13,6 +13,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 public class ListenToSpellApplication extends Application {
+
   private static final String TAG = ListenToSpellApplication.class.getName();
 
   private static final String COLOR_CODE_WORDS = "COLOR_CODE_WORDS";
@@ -21,6 +22,7 @@ public class ListenToSpellApplication extends Application {
 
   private SQLiteDatabase sql;
   private SharedPreferences prefs;
+  private Speaker speaker;
 
   public ArrayList<Tuple> getTupleList(String listname) {
     ArrayList<Tuple> list = new ArrayList<Tuple>();
@@ -39,6 +41,7 @@ public class ListenToSpellApplication extends Application {
     super.onCreate();
     prefs = getSharedPreferences("listtospell", Context.MODE_PRIVATE);
     sql = new MySQLiteOpenHelper(this).getWritableDatabase();
+    speaker = new Speaker(this);
   }
 
   public void setTupleList(String listname, ArrayList<Tuple> list) {
@@ -86,6 +89,10 @@ public class ListenToSpellApplication extends Application {
 
   public void setSpellCorrectWords(boolean spellCorrectWords) {
     prefs.edit().putBoolean(SPELL_CORRECT_WORDS, spellCorrectWords).apply();
+  }
+
+  public Speaker getSpeaker() {
+    return speaker;
   }
 
 }

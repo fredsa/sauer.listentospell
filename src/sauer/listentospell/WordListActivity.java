@@ -3,8 +3,6 @@ package sauer.listentospell;
 import java.util.ArrayList;
 
 import sauer.listentospell.app.ListenToSpellApplication;
-import android.content.Intent;
-import android.graphics.LightingColorFilter;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,7 +33,7 @@ public class WordListActivity extends SpeechActivity {
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
       if (!hasFocus) {
-        sayNow(((EditText) v).getText().toString(), null);
+        app.getSpeaker().sayNow(((EditText) v).getText().toString());
       }
     }
   };
@@ -54,16 +52,6 @@ public class WordListActivity extends SpeechActivity {
     wordListNameEditView.setText(listName);
 
     app = (ListenToSpellApplication) getApplication();
-
-    Button saveButton = (Button) findViewById(R.id.word_list_save_button);
-    saveButton.getBackground().setColorFilter(new LightingColorFilter(0x00000000, 0xFF348017));
-    saveButton.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        parseAndSave();
-        startActivity(new Intent().setClass(WordListActivity.this, MainActivity.class));
-      }
-    });
 
     linearLayout = (LinearLayout) findViewById(R.id.word_list_linear_layout);
     for (int i = 1; i <= 1; i++) {
@@ -128,8 +116,7 @@ public class WordListActivity extends SpeechActivity {
     }
   }
 
-  private void updateHints(final EditText wordEditText, final EditText sentenceEditText,
-      int number) {
+  private void updateHints(final EditText wordEditText, final EditText sentenceEditText, int number) {
     String word = wordEditText.getText().toString();
     sentenceEditText.setEnabled(word.length() > 0);
     if (word.length() > 0) {

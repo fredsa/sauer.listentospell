@@ -1,51 +1,52 @@
 package sauer.listentospell;
 
-import android.app.TabActivity;
-import android.content.Intent;
-import android.content.res.Configuration;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.ActionBar.TabListener;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.widget.TabHost;
+import android.support.v4.app.FragmentActivity;
 
-public class MainActivity extends TabActivity {
+public class MainActivity extends FragmentActivity {
+
+  private class Foo implements TabListener {
+
+    private final Fragment fragment;
+
+    public Foo(Fragment fragment) {
+      this.fragment = fragment;
+    }
+
+    @Override
+    public void onTabReselected(Tab tab, FragmentTransaction ft) {
+    }
+
+    @Override
+    public void onTabSelected(Tab tab, FragmentTransaction ft) {
+      getFragmentManager().beginTransaction().replace(R.id.main_fragment_container, fragment).commit();
+
+    }
+
+    @Override
+    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+    }
+
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    setContentView(R.layout.main_layout);
 
-    setContentView(R.layout.main_tab_layout);
+    ActionBar actionBar = getActionBar();
+    actionBar.setHomeButtonEnabled(false);
 
-    TabHost tabHost = getTabHost();
-    TabHost.TabSpec spec;
-    Intent intent;
+    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-    //    // Train
-    //    intent = new Intent().setClass(this, GetReadyToTrainActivity.class);
-    //    spec = tabHost.newTabSpec("train").setIndicator("Train").setContent(intent);
-    //    tabHost.addTab(spec);
-    //
-    //    // Word List
-    //    intent = new Intent().setClass(this, WordListActivity.class);
-    //    spec = tabHost.newTabSpec("entry").setIndicator("Word List").setContent(intent);
-    //    tabHost.addTab(spec);
-
-    // Word Lists
-    intent = new Intent().setClass(this, WordListsActivity.class);
-    spec = tabHost.newTabSpec("entry").setIndicator("Word Lists").setContent(intent);
-    tabHost.addTab(spec);
-
-    // Settings
-    intent = new Intent().setClass(this, SettingsActivity.class);
-    spec = tabHost.newTabSpec("entry2").setIndicator("Settings").setContent(intent);
-    tabHost.addTab(spec);
-
-    //    // My Stats
-    //    intent = new Intent().setClass(this, MyStatsActivity.class);
-    //    spec = tabHost.newTabSpec("entry3").setIndicator("My Stats").setContent(intent);
-    //    tabHost.addTab(spec);
-
-    //    ListenToSpellApplication app = (ListenToSpellApplication) getApplication();
-    //    tabHost.setCurrentTab(app.isSetup() ? 0 : 1);
-    tabHost.setCurrentTab(0);
+    actionBar.addTab(actionBar.newTab().setText("Word Lists").setTabListener(
+        new Foo(new WordListsFragment())));
+    actionBar.addTab(actionBar.newTab().setText("Settings").setTabListener(
+        new Foo(new SettingsFragment())));
   }
-
 }

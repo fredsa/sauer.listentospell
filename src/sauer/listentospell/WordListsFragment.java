@@ -7,22 +7,23 @@ import java.util.Locale;
 
 import sauer.listentospell.app.ListenToSpellApplication;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.LightingColorFilter;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class WordListsActivity extends SpeechActivity {
+public class WordListsFragment extends Fragment {
 
+  @SuppressWarnings("unused")
   private static final String TAG = WordListsActivity.class.getName();
 
   private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd", Locale.US);
@@ -32,35 +33,48 @@ public class WordListsActivity extends SpeechActivity {
   private ListenToSpellApplication app;
   private LinearLayout linearLayout;
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  private LayoutInflater inflater;
 
-    setContentView(R.layout.word_lists);
-    addWordListButton = (Button) findViewById(R.id.add_word_list_button);
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    this.inflater = inflater;
+    super.onCreateView(inflater, container, savedInstanceState);
+
+    View view = inflater.inflate(R.layout.word_lists, null);
+
+    addWordListButton = (Button) view.findViewById(R.id.add_word_list_button);
     addWordListButton.getBackground().setColorFilter(
         new LightingColorFilter(0x00000000, 0xFF2554C7));
 
-    app = (ListenToSpellApplication) getApplication();
-
-    linearLayout = (LinearLayout) findViewById(R.id.word_lists_linear_layout);
     addWordListButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View arg0) {
         addWordListPrompt();
       }
     });
+
+    linearLayout = (LinearLayout) view.findViewById(R.id.word_lists_linear_layout);
+
+    return view;
+  }
+
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+
+    app = (ListenToSpellApplication) getActivity().getApplication();
+    loadAndShow();
   }
 
   private void addWordListPrompt() {
-    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 
     alert.setTitle("Create a new spelling list");
     alert.setMessage(R.string.prompt_new_list_name);
     app.getSpeaker().sayNow(getString(R.string.prompt_new_list_name));
 
     // Set an EditText view to get user input 
-    final EditText listNameEditText = new EditText(this);
+    final EditText listNameEditText = new EditText(getActivity());
     listNameEditText.setText("Word list " + DATE_FORMAT.format(new Date()));
     alert.setView(listNameEditText);
 
@@ -88,7 +102,7 @@ public class WordListsActivity extends SpeechActivity {
   }
 
   private void addWordList(final String listName) {
-    View item = View.inflate(this, R.layout.word_list_item, null);
+    View item = inflater.inflate(R.layout.word_list_item, null);
     linearLayout.addView(item);
 
     TextView word = (TextView) item.findViewById(R.id.word_list_item_word);
@@ -105,7 +119,7 @@ public class WordListsActivity extends SpeechActivity {
     takeTestButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        Intent intent = new Intent(WordListsActivity.this, TrainActivity.class);
+        Intent intent = new Intent(app, TrainActivity.class);
         intent.putExtra("listName", listName);
         startActivity(intent);
       }
@@ -122,83 +136,4 @@ public class WordListsActivity extends SpeechActivity {
     }
   }
 
-  @Override
-  protected void onSaveInstanceState(Bundle outState) {
-    super.onSaveInstanceState(outState);
-    Log.d(TAG, "onSaveInstanceState()");
-  }
-
-  @Override
-  public void onAttachedToWindow() {
-    super.onAttachedToWindow();
-    Log.d(TAG, "onAttachedToWindow()");
-  }
-
-  @Override
-  public void onBackPressed() {
-    super.onBackPressed();
-    Log.d(TAG, "onBackPressed()");
-  }
-
-  @Override
-  public void onDetachedFromWindow() {
-    super.onDetachedFromWindow();
-    Log.d(TAG, "onDetachedFromWindow()");
-  }
-
-  @Override
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    Log.d(TAG, "onKeyDown()");
-    return super.onKeyDown(keyCode, event);
-  }
-
-  @Override
-  public void onWindowFocusChanged(boolean hasFocus) {
-    super.onWindowFocusChanged(hasFocus);
-    Log.d(TAG, "onWindowFocusChanged()");
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    Log.d(TAG, "onDestroy()");
-  }
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-    Log.d(TAG, "onStart()");
-
-    loadAndShow();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStart();
-    Log.d(TAG, "onStop()");
-  }
-
-  @Override
-  protected void onRestart() {
-    super.onRestart();
-    Log.d(TAG, "onRestart()");
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    Log.d(TAG, "onResume()");
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    Log.d(TAG, "onPause()");
-  }
-
-  @Override
-  public void onConfigurationChanged(Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-    Log.d(TAG, "onConfigurationChanged()");
-  }
 }

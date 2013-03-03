@@ -27,5 +27,6 @@
     <string name="spell_correct_words_checkbox_description">Words are spelled (spoken) after entered correctly.</string>
     <string name="prompt_new_list_name">Enter a name for your new spelling list</string>
     <string name="action_settings">Settings</string>
+    <string name="train_test_status">%1$d / %2$d words remaining</string>
 
 </resources>
