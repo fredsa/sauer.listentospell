@@ -3,22 +3,21 @@ package sauer.listentospell.app;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import sauer.listentospell.R;
 import sauer.listentospell.Tuple;
 import android.app.Application;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class ListenToSpellApplication extends Application {
 
   private static final String TAG = ListenToSpellApplication.class.getName();
 
-  private static final String COLOR_CODE_WORDS = "COLOR_CODE_WORDS";
-  private static final String SPELL_CORRECT_WORDS = "SPELL_CORRECT_WORDS";
-  private static final String WORDLIST = "wordlist";
+  private static final String WORDLIST_TABLE = "wordlist";
 
   private SQLiteDatabase sql;
   private SharedPreferences prefs;
@@ -26,7 +25,7 @@ public class ListenToSpellApplication extends Application {
 
   public ArrayList<Tuple> getTupleList(String listname) {
     ArrayList<Tuple> list = new ArrayList<Tuple>();
-    Cursor query = sql.query(WORDLIST, null, "listname = ?", new String[] {listname}, null, null,
+    Cursor query = sql.query(WORDLIST_TABLE, null, "listname = ?", new String[] {listname}, null, null,
         null);
     while (query.moveToNext()) {
       String word = query.getString(1);
@@ -39,7 +38,8 @@ public class ListenToSpellApplication extends Application {
   @Override
   public void onCreate() {
     super.onCreate();
-    prefs = getSharedPreferences("listtospell", Context.MODE_PRIVATE);
+    PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+    prefs = PreferenceManager.getDefaultSharedPreferences(this);
     sql = new MySQLiteOpenHelper(this).getWritableDatabase();
     speaker = new Speaker(this);
   }
@@ -47,9 +47,9 @@ public class ListenToSpellApplication extends Application {
   public void setTupleList(String listname, ArrayList<Tuple> list) {
     Log.d(TAG, "updateWordText(" + list + ")");
 
-    sql.delete(WORDLIST, "listname = ?", new String[] {listname});
+    sql.delete(WORDLIST_TABLE, "listname = ?", new String[] {listname});
     HashSet<String> seen = new HashSet<String>();
-    SQLiteStatement stmt = sql.compileStatement("INSERT INTO " + WORDLIST + " VALUES (?, ?, ?)");
+    SQLiteStatement stmt = sql.compileStatement("INSERT INTO " + WORDLIST_TABLE + " VALUES (?, ?, ?)");
     for (Tuple tuple : list) {
       if (seen.add(tuple.word)) {
         stmt.bindString(1, listname);
@@ -66,7 +66,7 @@ public class ListenToSpellApplication extends Application {
 
   public ArrayList<String> getListNames() {
     ArrayList<String> list = new ArrayList<String>();
-    Cursor query = sql.query(WORDLIST, new String[] {"listname"}, null, null, "listname", null,
+    Cursor query = sql.query(WORDLIST_TABLE, new String[] {"listname"}, null, null, "listname", null,
         "listname DESC");
     while (query.moveToNext()) {
       String listName = query.getString(0);
@@ -76,19 +76,11 @@ public class ListenToSpellApplication extends Application {
   }
 
   public boolean getColorCodeWords() {
-    return prefs.getBoolean(COLOR_CODE_WORDS, true);
-  }
-
-  public void setColorCodeWords(boolean colorCodeWords) {
-    prefs.edit().putBoolean(COLOR_CODE_WORDS, colorCodeWords).apply();
+    return prefs.getBoolean(getString(R.string.preference_immediate_feedback_key), true);
   }
 
   public boolean getSpellCorrectWords() {
-    return prefs.getBoolean(SPELL_CORRECT_WORDS, true);
-  }
-
-  public void setSpellCorrectWords(boolean spellCorrectWords) {
-    prefs.edit().putBoolean(SPELL_CORRECT_WORDS, spellCorrectWords).apply();
+    return prefs.getBoolean(getString(R.string.preference_reinforce_correct_spelling_key), true);
   }
 
   public Speaker getSpeaker() {

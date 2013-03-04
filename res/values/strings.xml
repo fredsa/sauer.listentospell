@@ -2,14 +2,16 @@
 <resources>
 
     <string name="app_name">Super Star Speller</string>
-    <string name="color_code_words">Immediate feedback</string>
-    <string name="color_code_words_checkbox_description">Words are color coded as you type.</string>
     <string name="delete_button">delete</string>
     <string name="new_word_list">+ New Spelling List</string>
+    <string name="preference_immediate_feedback_key">IMMEDIATE_FEEDBACK</string>
+    <string name="preference_immediate_feedback_summary">Immediate feedback</string>
+    <string name="preference_immediate_feedback_title">Words are color coded as you type</string>
+    <string name="preference_reinforce_correct_spelling_key">REINFORCE_CORRECT_SPELLING</string>
+    <string name="preference_reinforce_correct_spelling_summary">Words are spelled (spoken) after entered correctly</string>
+    <string name="preference_reinforce_correct_spelling_title">Reinforce correct spelling</string>
     <string name="prompt_new_list_name">Enter a name for your new spelling list</string>
     <string name="repeat_word_button">Repeat word</string>
-    <string name="spell_correct_words">Reinforce correct spelling</string>
-    <string name="spell_correct_words_checkbox_description">Words are spelled (spoken) after entered correctly.</string>
     <string name="splash_app_name">Super\nStar\nSpeller</string>
     <string name="submit_button">Done</string>
     <string name="train_test_status">%1$d / %2$d words remaining</string>

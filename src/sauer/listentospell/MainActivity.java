@@ -45,7 +45,7 @@ public class MainActivity extends SpeechActivity {
 
     actionBar.addTab(actionBar.newTab().setText("Word Lists").setTabListener(
         new Foo(new WordListsFragment())));
-    actionBar.addTab(actionBar.newTab().setText("Settings").setTabListener(
-        new Foo(new SettingsFragment())));
+    actionBar.addTab(actionBar.newTab().setText("Preferences").setTabListener(
+        new Foo(new SpellerPreferenceFragment())));
   }
 }
