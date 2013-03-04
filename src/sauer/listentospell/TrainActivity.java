@@ -104,7 +104,7 @@ public class TrainActivity extends SpeechActivity {
     Log.d(TAG, "initWordLists()...");
     initWordLists(listName);
 
-    setContentView(R.layout.train);
+    setContentView(R.layout.activity_train);
 
     answerEditText = (EditText) findViewById(R.id.answer_textbox);
     answerEditText.setText(partialAnswer);

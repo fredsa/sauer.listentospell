@@ -46,7 +46,7 @@ public class WordListActivity extends SpeechActivity {
     listName = getIntent().getStringExtra("listName");
     Log.d(TAG, "getIntent().getStringExtra(\"listName\") = " + listName);
 
-    setContentView(R.layout.word_list);
+    setContentView(R.layout.activity_word_list);
 
     wordListNameEditView = (TextView) findViewById(R.id.word_list_name);
     wordListNameEditView.setText(listName);
@@ -62,7 +62,7 @@ public class WordListActivity extends SpeechActivity {
   }
 
   private void addWordRow(boolean requestFocus) {
-    View wordSentenceItem = View.inflate(this, R.layout.word_sentence_item, null);
+    View wordSentenceItem = View.inflate(this, R.layout.fragment_word_sentence, null);
     linearLayout.addView(wordSentenceItem);
 
     final int index = wordEditTextList.size();

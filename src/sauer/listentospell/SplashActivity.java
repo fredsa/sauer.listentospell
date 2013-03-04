@@ -25,7 +25,7 @@ public class SplashActivity extends SpeechActivity {
     app.getSpeaker().initTts(new NextTask() {
       @Override
       protected void onPostExecute(Void result) {
-        app.getSpeaker().say(getString(R.string.hello), new NextTask() {
+        app.getSpeaker().say(getString(R.string.welcome_to_super_star_speller), new NextTask() {
           @Override
           protected void onPostExecute(Void result) {
             Intent intent = new Intent(app, MainActivity.class);

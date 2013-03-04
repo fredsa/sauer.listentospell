@@ -1,32 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Welcome to Super Star Speller!</string>
     <string name="app_name">Super Star Speller</string>
-    <string name="splash_app_name">Super\nStar\nSpeller</string>
-    <string name="repeat_word_button">Repeat word</string>
-    <string name="submit_button">Done</string>
-    <string name="word_list_heading">Word List:</string>
-    <string name="save_button">Save</string>
-    <string name="wait_for_tts">Initializing TTS…</string>
-    <string name="cannot_train">Your word list is empty.</string>
-    <string name="please_click_word_list_tab">"Please click on the 'Word List' tab to create your word list. You can then come back here to train yourself."</string>
-    <string name="initializing_tts">Initializing TTS…</string>
-    <string name="initializing_tts2">Please wait for Text To Speech service to startup…</string>
-    <string name="start">Start</string>
-    <string name="add_word_row">Add Word</string>
-    <string name="get_read_to_train_text_view">Are you ready to test yourself?</string>
-    <string name="word_lists">Word Lists</string>
-    <string name="new_word_list">+ New Spelling List</string>
-    <string name="word_list_item_edit_text">Edit</string>
-    <string name="word_list_item_take_test">Take Test</string>
-    <string name="delete_button">delete</string>
-    <string name="spell_correct_words">Reinforce correct spelling</string>
     <string name="color_code_words">Immediate feedback</string>
     <string name="color_code_words_checkbox_description">Words are color coded as you type.</string>
-    <string name="spell_correct_words_checkbox_description">Words are spelled (spoken) after entered correctly.</string>
+    <string name="delete_button">delete</string>
+    <string name="new_word_list">+ New Spelling List</string>
     <string name="prompt_new_list_name">Enter a name for your new spelling list</string>
-    <string name="action_settings">Settings</string>
+    <string name="repeat_word_button">Repeat word</string>
+    <string name="spell_correct_words">Reinforce correct spelling</string>
+    <string name="spell_correct_words_checkbox_description">Words are spelled (spoken) after entered correctly.</string>
+    <string name="splash_app_name">Super\nStar\nSpeller</string>
+    <string name="submit_button">Done</string>
     <string name="train_test_status">%1$d / %2$d words remaining</string>
+    <string name="welcome_to_super_star_speller">Welcome to Super Star Speller!</string>
+    <string name="word_list_heading">Word List:</string>
+    <string name="word_list_item_edit_text">Edit</string>
+    <string name="word_list_item_take_test">Take Test</string>
+    <string name="word_lists">Word Lists</string>
 
 </resources>

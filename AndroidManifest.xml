@@ -38,8 +38,6 @@
         </activity>
         <activity android:name="sauer.listentospell.MyStatsActivity" >
         </activity>
-        <activity android:name="sauer.listentospell.SettingsActivity" >
-        </activity>
         <activity
             android:name="sauer.listentospell.SplashActivity"
             android:configChanges="orientation|screenSize" >

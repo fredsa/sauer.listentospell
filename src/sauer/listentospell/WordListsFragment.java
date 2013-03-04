@@ -24,7 +24,7 @@ import android.widget.TextView;
 public class WordListsFragment extends Fragment {
 
   @SuppressWarnings("unused")
-  private static final String TAG = WordListsActivity.class.getName();
+  private static final String TAG = WordListsFragment.class.getName();
 
   private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd", Locale.US);
 
@@ -40,7 +40,7 @@ public class WordListsFragment extends Fragment {
     this.inflater = inflater;
     super.onCreateView(inflater, container, savedInstanceState);
 
-    View view = inflater.inflate(R.layout.word_lists, null);
+    View view = inflater.inflate(R.layout.activity_word_lists, null);
 
     addWordListButton = (Button) view.findViewById(R.id.add_word_list_button);
     addWordListButton.getBackground().setColorFilter(
@@ -102,7 +102,7 @@ public class WordListsFragment extends Fragment {
   }
 
   private void addWordList(final String listName) {
-    View item = inflater.inflate(R.layout.word_list_item, null);
+    View item = inflater.inflate(R.layout.fragment_word_list, null);
     linearLayout.addView(item);
 
     TextView word = (TextView) item.findViewById(R.id.word_list_item_word);

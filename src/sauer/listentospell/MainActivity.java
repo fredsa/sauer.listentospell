@@ -36,7 +36,7 @@ public class MainActivity extends SpeechActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.main_layout);
+    setContentView(R.layout.activity_main);
 
     ActionBar actionBar = getActionBar();
     actionBar.setHomeButtonEnabled(false);
