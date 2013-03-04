@@ -4,10 +4,10 @@ import sauer.listentospell.app.ListenToSpellApplication;
 import sauer.listentospell.app.NextTask;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 public class SplashActivity extends SpeechActivity {
 
+  @SuppressWarnings("unused")
   private static final String TAG = SplashActivity.class.getName();
 
   private ListenToSpellApplication app;
@@ -25,7 +25,6 @@ public class SplashActivity extends SpeechActivity {
     app.getSpeaker().initTts(new NextTask() {
       @Override
       protected void onPostExecute(Void result) {
-        Log.d(TAG, "HELLO.....");
         app.getSpeaker().say(getString(R.string.hello), new NextTask() {
           @Override
           protected void onPostExecute(Void result) {

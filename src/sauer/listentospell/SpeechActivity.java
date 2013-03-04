@@ -1,10 +1,10 @@
 package sauer.listentospell;
 
+import android.app.Activity;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 
-public abstract class SpeechActivity extends FragmentActivity {
+public abstract class SpeechActivity extends Activity {
 
   @SuppressWarnings("unused")
   private final String TAG = SpeechActivity.class.getName() + ":" + this.getClass().getSimpleName();

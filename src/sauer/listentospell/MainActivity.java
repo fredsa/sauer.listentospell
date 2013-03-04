@@ -6,9 +6,8 @@ import android.app.ActionBar.TabListener;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends SpeechActivity {
 
   private class Foo implements TabListener {
 
